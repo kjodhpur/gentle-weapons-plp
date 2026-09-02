@@ -264,8 +264,8 @@ export const clients: ClientConfig[] = [
     accent: ACCENTS.phosphor,
     hero: {
       rev: 'REV 2026.05',
-      headlineTop: 'Your autonomy stack',
-      headlineBottom: 'ships or it does not.',
+      headlineTop: "Your aircraft don't",
+      headlineBottom: 'come back for patches.',
       lede: 'Hardened edge compute for UAS teams moving from flight test to fielded aircraft.',
       bullets: [
         'GWOS turns Jetson developer kits into attestable, fielded compute.',
@@ -295,8 +295,8 @@ export const clients: ClientConfig[] = [
     accent: ACCENTS.amber,
     hero: {
       rev: 'REV 2026.05',
-      headlineTop: 'One control plane',
-      headlineBottom: 'for the whole fleet.',
+      headlineTop: 'The vehicles are fielded.',
+      headlineBottom: 'The software still ships.',
       lede: 'Fleet-scale software deployment for ground vehicle programs already in the field.',
       bullets: [
         'Poolboy ships models and binaries to vehicles in test and deployment.',
@@ -326,8 +326,8 @@ export const clients: ClientConfig[] = [
     accent: ACCENTS.cyan,
     hero: {
       rev: 'REV 2026.05',
-      headlineTop: 'The link will drop.',
-      headlineBottom: 'The mission will not.',
+      headlineTop: "Collection doesn't pause",
+      headlineBottom: 'when the link goes dark.',
       lede: 'Partition-tolerant mesh networking for ISR collection in contested spectrum.',
       bullets: [
         'Poolnet self-forms and heals without backhaul, egress optional.',
