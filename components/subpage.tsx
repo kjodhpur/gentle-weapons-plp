@@ -30,7 +30,13 @@ function SubNav({ config }: { config: ClientConfig }) {
         style={{ maxWidth: 1280, margin: '0 auto' }}
       >
         <div style={{ display: 'flex', alignItems: 'center', gap: 18, minWidth: 0 }}>
-          <Link href={`/${config.slug}`} style={{ display: 'inline-flex', flexShrink: 0 }}>
+          {/* Same as the landing-page nav: the mark routes to the internal
+              index listing every personalized page. */}
+          <Link
+            href="/"
+            aria-label="All personalized pages"
+            style={{ display: 'inline-flex', flexShrink: 0 }}
+          >
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src="/assets/logo.png"
@@ -41,7 +47,10 @@ function SubNav({ config }: { config: ClientConfig }) {
             />
           </Link>
           <span style={{ color: 'var(--gw-gray-1)', flexShrink: 0 }}>×</span>
-          <span
+          {/* The mark goes to the index, so the client name is the way back
+              to this prospect's own landing page. */}
+          <Link
+            href={`/${config.slug}`}
             style={{
               fontSize: 12,
               fontWeight: 700,
@@ -53,7 +62,7 @@ function SubNav({ config }: { config: ClientConfig }) {
             }}
           >
             {config.clientName}
-          </span>
+          </Link>
           <div className="nav-links" style={{ display: 'none', gap: 4, marginLeft: 8 }}>
             {PRODUCT_KEYS.map((key) => (
               <Link
