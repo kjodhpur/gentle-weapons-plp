@@ -2,7 +2,7 @@ import Link from 'next/link'
 
 import { ClientLogo } from '@/components/client-logo'
 import { Ascii, DisplayHeading, Kicker, TerminalPanel } from '@/components/gw-ui'
-import { clients, getClient, PRODUCTS } from '@/lib/clients'
+import { clients, getClient, PRODUCT_COLORS, PRODUCTS } from '@/lib/clients'
 import { initials, OPEN_ROLES, PROSPECTS, prospectsForClient } from '@/lib/prospects'
 
 const STAGES = [
@@ -30,6 +30,14 @@ const STAGES = [
     title: 'Pages generated',
     lines: ['One landing page', 'plus 16 sub-pages', 'at a distinct URL'],
   },
+]
+
+// Pipeline stages cycle the three product colors, as the site does.
+const STAGE_COLORS = [
+  PRODUCT_COLORS.gwos,
+  PRODUCT_COLORS.poolnet,
+  PRODUCT_COLORS.poolboy,
+  PRODUCT_COLORS.gwos,
 ]
 
 // The worked example the pipeline transcript walks through.
@@ -284,7 +292,7 @@ export function LeadFlow() {
           >
             {STAGES.map((stage, i) => (
               <div key={stage.n} style={{ background: '#000' }}>
-                <Stage stage={stage} accent={clients[i % clients.length].accent} />
+                <Stage stage={stage} accent={STAGE_COLORS[i]} />
               </div>
             ))}
           </div>
@@ -371,7 +379,7 @@ $ → /${example.slug}  [ READY ]`}</Ascii>
                       mark={client.logoMark}
                       src={client.clientLogoSrc}
                       website={client.website}
-                      color={client.accent}
+                      color={PRODUCT_COLORS[client.productOrder[0]]}
                       size={32}
                     />
                     <a
@@ -411,7 +419,7 @@ $ → /${example.slug}  [ READY ]`}</Ascii>
                       marginTop: 10,
                       fontSize: 12,
                       letterSpacing: '0.18em',
-                      color: client.accent,
+                      color: PRODUCT_COLORS[client.productOrder[0]],
                       textTransform: 'uppercase',
                     }}
                   >
@@ -446,7 +454,7 @@ $ → /${example.slug}  [ READY ]`}</Ascii>
                     name={p.name}
                     title={p.title}
                     slug={client.slug}
-                    accent={client.accent}
+                    accent={PRODUCT_COLORS[client.productOrder[0]]}
                     linkedin={p.linkedin}
                     verified={p.linkedinVerified}
                     highlight={p.name === EXAMPLE_CONTACT}

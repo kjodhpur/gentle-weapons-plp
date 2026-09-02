@@ -112,9 +112,11 @@ Links and logos on the index:
   service via `ClientLogo`, with the monogram as a fallback if the fetch fails. To use a
   proper logo file instead, drop it in `/public/logos/` and set `clientLogoSrc` — it takes
   precedence. These marks identify the company; they do not imply any relationship.
-- **Accent colors are chosen to fit, not extracted.** The build environment cannot reach the
-  companies' sites, so each `accent` is a thematic pick from the site palette. Set the real
-  brand hex on `accent` once you have looked at each site.
+- **Colors follow the production site, not the prospect.** Product elements use the site's own
+  product colors from `PRODUCT_COLORS` — GWOS green, Poolnet blue, Poolboy gold — wherever a
+  product is shown. Everything else uses the site's green (`accent`, the same for every client)
+  and white, exactly as the original homepage does. There is no per-client brand color. On the
+  index, each company card is keyed to the color of its lead product.
 
 ## Notes
 

@@ -5,7 +5,7 @@ import { ClientLogo } from '@/components/client-logo'
 import { Ascii, BracketLink, DisplayHeading, Kicker, Section, TerminalPanel } from '@/components/gw-ui'
 import { SiteFooter } from '@/components/sections'
 import type { Alternative, ClientConfig, Product } from '@/lib/clients'
-import { ALTERNATIVES, PRODUCTS } from '@/lib/clients'
+import { ALTERNATIVES, PRODUCT_COLORS, PRODUCTS } from '@/lib/clients'
 import type { Guide } from '@/lib/subpages'
 import { GUIDES, guidesForProduct } from '@/lib/subpages'
 
@@ -214,13 +214,14 @@ function alternativesForProduct(product: string): Alternative[] {
 export function PlatformPage({ config, product }: { config: ClientConfig; product: Product }) {
   const guides = guidesForProduct(product.key)
   const alts = alternativesForProduct(product.key)
+  const color = PRODUCT_COLORS[product.key]
 
   return (
     <SubPageShell config={config}>
       <Section style={{ borderTop: 'none' }}>
         <Kicker>// PLATFORM · PRODUCT</Kicker>
         <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap', marginTop: 14 }}>
-          <Pill color={config.accent}>{product.category}</Pill>
+          <Pill color={color}>{product.category}</Pill>
           <Pill>{product.readiness}</Pill>
         </div>
 
@@ -248,8 +249,8 @@ export function PlatformPage({ config, product }: { config: ClientConfig; produc
               {product.body}
             </p>
 
-            <div style={{ borderLeft: `3px solid ${config.accent}`, paddingLeft: 16 }}>
-              <Kicker style={{ color: config.accent }}>
+            <div style={{ borderLeft: `3px solid ${color}`, paddingLeft: 16 }}>
+              <Kicker style={{ color: color }}>
                 &gt; FOR {config.clientName.toUpperCase()}
               </Kicker>
               <p style={{ marginTop: 8, color: 'var(--gw-bone)', fontSize: 14.5, lineHeight: 1.65 }}>
@@ -259,7 +260,7 @@ export function PlatformPage({ config, product }: { config: ClientConfig; produc
 
             <div style={{ borderTop: '1px solid var(--gw-gray-1)', paddingTop: 18 }}>
               <Kicker style={{ marginBottom: 12 }}>&gt; CAPABILITY_SET</Kicker>
-              <OkList points={product.capabilities} accent={config.accent} />
+              <OkList points={product.capabilities} accent={color} />
             </div>
 
             <LinkRow
@@ -292,13 +293,14 @@ export function PlatformPage({ config, product }: { config: ClientConfig; produc
 export function GuidePage({ config, guide }: { config: ClientConfig; guide: Guide }) {
   const product = PRODUCTS[guide.product]
   const alts = alternativesForProduct(guide.product)
+  const color = PRODUCT_COLORS[guide.product]
 
   return (
     <SubPageShell config={config}>
       <Section style={{ borderTop: 'none' }}>
         <Kicker>// CATEGORY · {product.name.toUpperCase()}</Kicker>
         <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap', marginTop: 14 }}>
-          <Pill color={config.accent}>{product.category}</Pill>
+          <Pill color={color}>{product.category}</Pill>
           <Pill>MESA, AZ</Pill>
         </div>
 
@@ -338,7 +340,7 @@ export function GuidePage({ config, guide }: { config: ClientConfig; guide: Guid
                     textTransform: 'uppercase',
                     lineHeight: 1.2,
                     letterSpacing: '0.01em',
-                    borderTop: `2px solid ${config.accent}`,
+                    borderTop: `2px solid ${color}`,
                     paddingTop: 16,
                   }}
                 >
@@ -360,7 +362,7 @@ export function GuidePage({ config, guide }: { config: ClientConfig; guide: Guid
 
           <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
             <TerminalPanel title={`${guide.key}.md`}>
-              <OkList points={guide.points} accent={config.accent} />
+              <OkList points={guide.points} accent={color} />
             </TerminalPanel>
             <LinkRow
               label="RELATED_TOPICS"
@@ -391,6 +393,7 @@ export function AlternativePage({
   alternative: Alternative
 }) {
   const product = PRODUCTS[alternative.product]
+  const color = PRODUCT_COLORS[alternative.product]
   const guides = guidesForProduct(alternative.product)
   const siblings = alternativesForProduct(alternative.product).filter(
     (a) => a.key !== alternative.key,
@@ -400,7 +403,7 @@ export function AlternativePage({
     <SubPageShell config={config}>
       <Section style={{ borderTop: 'none' }}>
         <Kicker>// ALTERNATIVE · {product.name.toUpperCase()}</Kicker>
-        <DisplayHeading size="clamp(34px, 4.6vw, 68px)" style={{ marginTop: 14, color: config.accent }}>
+        <DisplayHeading size="clamp(34px, 4.6vw, 68px)" style={{ marginTop: 14, color: color }}>
           {alternative.vs}
         </DisplayHeading>
         <DisplayHeading size="clamp(30px, 4vw, 54px)" style={{ marginTop: 18 }}>
@@ -435,7 +438,7 @@ export function AlternativePage({
           </div>
 
           <TerminalPanel title="why_teams_switch">
-            <OkList points={alternative.points} accent={config.accent} />
+            <OkList points={alternative.points} accent={color} />
           </TerminalPanel>
         </div>
       </Section>

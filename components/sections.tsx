@@ -10,7 +10,7 @@ import {
   TerminalPanel,
 } from '@/components/gw-ui'
 import type { ClientConfig } from '@/lib/clients'
-import { ALTERNATIVES, PRODUCTS, PROBLEMS } from '@/lib/clients'
+import { ALTERNATIVES, PRODUCT_COLORS, PRODUCTS, PROBLEMS } from '@/lib/clients'
 import { guidesForProduct } from '@/lib/subpages'
 
 export function Hero({ config }: { config: ClientConfig }) {
@@ -62,7 +62,7 @@ export function Hero({ config }: { config: ClientConfig }) {
                 display: 'inline-block',
                 width: 18,
                 height: '0.78em',
-                background: config.accent,
+                background: '#fff',
                 verticalAlign: 'baseline',
                 marginLeft: 10,
               }}
@@ -104,7 +104,7 @@ export function Hero({ config }: { config: ClientConfig }) {
             ))}
           </div>
           <div style={{ display: 'flex', gap: 16, alignItems: 'center' }}>
-            <OffsetButton href="#contact" offsetColor={config.accent}>
+            <OffsetButton href="#contact" offsetColor="#fff">
               {config.ctaLabel}
             </OffsetButton>
           </div>
@@ -220,6 +220,7 @@ export function Products({ config, counter }: { config: ClientConfig; counter: s
       <div style={{ display: 'grid', gap: 36 }}>
         {config.productOrder.map((key, index) => {
           const product = PRODUCTS[key]
+          const productColor = PRODUCT_COLORS[product.key]
           return (
             <div key={key} id={key} style={{ position: 'relative', scrollMarginTop: 80 }}>
               {/* Accent block offset behind the card. Kept as a sibling rather
@@ -230,7 +231,7 @@ export function Products({ config, counter }: { config: ClientConfig; counter: s
                 style={{
                   position: 'absolute',
                   inset: 0,
-                  background: config.accent,
+                  background: productColor,
                   transform: 'translate(8px, 8px)',
                 }}
               />
@@ -258,7 +259,7 @@ export function Products({ config, counter }: { config: ClientConfig; counter: s
                       fontFamily: 'var(--font-display)',
                       fontSize: 34,
                       lineHeight: 1,
-                      color: config.accent,
+                      color: productColor,
                       letterSpacing: '-0.02em',
                     }}
                   >
@@ -269,9 +270,9 @@ export function Products({ config, counter }: { config: ClientConfig; counter: s
                       fontSize: 10,
                       letterSpacing: '0.22em',
                       textTransform: 'uppercase',
-                      border: `1px solid ${config.accent}`,
+                      border: `1px solid ${productColor}`,
                       padding: '3px 8px',
-                      color: config.accent,
+                      color: productColor,
                     }}
                   >
                     {product.category}
@@ -291,7 +292,7 @@ export function Products({ config, counter }: { config: ClientConfig; counter: s
 
                 <div>
                   <Kicker style={{ fontSize: 12, marginBottom: 10 }}>
-                    // PRODUCT_ID: <span style={{ color: config.accent }}>{product.key}</span>
+                    // PRODUCT_ID: <span style={{ color: productColor }}>{product.key}</span>
                   </Kicker>
                   <DisplayHeading size="clamp(56px, 7vw, 96px)" style={{ lineHeight: 0.85 }}>
                     {product.name}
@@ -325,12 +326,12 @@ export function Products({ config, counter }: { config: ClientConfig; counter: s
                 {/* What this product means for this prospect specifically. */}
                 <div
                   style={{
-                    borderLeft: `3px solid ${config.accent}`,
+                    borderLeft: `3px solid ${productColor}`,
                     paddingLeft: 16,
                     maxWidth: 560,
                   }}
                 >
-                  <Kicker style={{ color: config.accent }}>
+                  <Kicker style={{ color: productColor }}>
                     &gt; FOR {config.clientName.toUpperCase()}
                   </Kicker>
                   <p
@@ -368,7 +369,7 @@ export function Products({ config, counter }: { config: ClientConfig; counter: s
                           alignItems: 'baseline',
                         }}
                       >
-                        <span style={{ color: config.accent }}>[ OK ]</span>
+                        <span style={{ color: productColor }}>[ OK ]</span>
                         <span style={{ color: 'var(--gw-bone)' }}>{capability}</span>
                       </li>
                     ))}
@@ -441,6 +442,7 @@ export function Competitor({ config, counter }: { config: ClientConfig; counter:
   if (!config.competitor) return null
   const alt = ALTERNATIVES[config.competitor]
   const product = PRODUCTS[alt.product]
+  const altColor = PRODUCT_COLORS[alt.product]
 
   return (
     <Section id="alternative">
@@ -457,7 +459,7 @@ export function Competitor({ config, counter }: { config: ClientConfig; counter:
           style={{
             position: 'absolute',
             inset: 0,
-            background: config.accent,
+            background: altColor,
             transform: 'translate(8px, 8px)',
           }}
         />
@@ -473,7 +475,7 @@ export function Competitor({ config, counter }: { config: ClientConfig; counter:
                 fontSize: 'clamp(28px, 3.4vw, 44px)',
                 lineHeight: 1,
                 letterSpacing: '-0.01em',
-                color: config.accent,
+                color: altColor,
               }}
             >
               {alt.vs}
@@ -508,7 +510,7 @@ export function Competitor({ config, counter }: { config: ClientConfig; counter:
                     alignItems: 'baseline',
                   }}
                 >
-                  <span style={{ color: config.accent }}>[ OK ]</span>
+                  <span style={{ color: altColor }}>[ OK ]</span>
                   <span style={{ color: 'var(--gw-bone)' }}>{point}</span>
                 </li>
               ))}
@@ -780,7 +782,7 @@ export function Contact({ config, counter }: { config: ClientConfig; counter: st
             </label>
 
             <div style={{ display: 'flex', alignItems: 'center', gap: 16, flexWrap: 'wrap' }}>
-              <OffsetButton href={mailto} offsetColor={config.accent}>
+              <OffsetButton href={mailto} offsetColor="#fff">
                 Transmit
               </OffsetButton>
               <span style={{ fontSize: 10, letterSpacing: '0.2em', color: 'var(--gw-gray-2)' }}>

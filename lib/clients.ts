@@ -216,6 +216,16 @@ export const ALTERNATIVES: Record<AlternativeKey, Alternative> = {
   },
 }
 
+/**
+ * Product colors, exactly as the production site assigns them: GWOS green,
+ * Poolnet blue, Poolboy gold. Product cards and product sub-pages use these.
+ */
+export const PRODUCT_COLORS: Record<ProductKey, string> = {
+  gwos: '#00ff88',
+  poolnet: '#00e5ff',
+  poolboy: '#ffb000',
+}
+
 /** Accent options, matching the production palette. */
 export const ACCENTS = {
   phosphor: '#00ff88',
@@ -231,7 +241,12 @@ export type ClientConfig = {
   clientName: string
   /** Sits under the co-branded lockup, e.g. "GPS-DENIED NAVIGATION". */
   clientDescriptor: string
-  /** Accent color driving pills, [ OK ] rows, and card offsets. */
+  /**
+   * Page accent for section kickers, doctrine rules, and the hero flag. The
+   * production site uses its green everywhere outside the product cards, so
+   * this stays ACCENTS.phosphor for every client; product cards take their
+   * own color from PRODUCT_COLORS. Not a per-client brand color.
+   */
   accent: string
   /** Optional real client logo under /public. Takes precedence over everything. */
   clientLogoSrc?: string
@@ -363,7 +378,7 @@ export const clients: ClientConfig[] = [
     slug: 'vermeer',
     clientName: 'Vermeer',
     clientDescriptor: 'GPS-DENIED NAVIGATION',
-    accent: ACCENTS.amber,
+    accent: ACCENTS.phosphor,
     round: 'Series A · $10M · Oct 2025',
     website: 'https://www.getvermeer.com',
     productNotes: {
@@ -422,7 +437,7 @@ export const clients: ClientConfig[] = [
     slug: 'blue-water-autonomy',
     clientName: 'Blue Water Autonomy',
     clientDescriptor: 'AUTONOMOUS SHIPS',
-    accent: ACCENTS.cyan,
+    accent: ACCENTS.phosphor,
     round: 'Series A · $50M · Aug 2025',
     website: 'https://www.blw.ai',
     productNotes: {
@@ -481,7 +496,7 @@ export const clients: ClientConfig[] = [
     slug: 'cx2',
     clientName: 'CX2',
     clientDescriptor: 'ELECTRONIC WARFARE',
-    accent: ACCENTS.redact,
+    accent: ACCENTS.phosphor,
     round: 'Series A · $31M · May 2025',
     website: 'https://www.cx2.com',
     productNotes: {
@@ -540,7 +555,7 @@ export const clients: ClientConfig[] = [
     slug: 'picogrid',
     clientName: 'Picogrid',
     clientDescriptor: 'DEFENSE INTEGRATION LAYER',
-    accent: ACCENTS.bone,
+    accent: ACCENTS.phosphor,
     round: 'Series A · $45M · May 2026',
     website: 'https://picogrid.com',
     productNotes: {
