@@ -75,24 +75,30 @@ function Stage({ stage, accent }: { stage: (typeof STAGES)[number]; accent: stri
   )
 }
 
-/** One prospect row: contact on the left, the URL it resolves to on the right. */
+/**
+ * One prospect row. The name links out to LinkedIn — a verified profile where
+ * we have one, otherwise a LinkedIn search for the name and company, marked as
+ * such. The URL on the right links to the page that contact would receive.
+ */
 function ProspectRow({
   name,
   title,
   slug,
   accent,
+  linkedin,
+  verified,
   highlight,
 }: {
   name: string
   title: string
   slug: string
   accent: string
+  linkedin: string
+  verified: boolean
   highlight?: boolean
 }) {
   return (
-    <Link
-      href={`/${slug}`}
-      className="hover-invert"
+    <div
       style={{
         display: 'grid',
         gridTemplateColumns: 'auto minmax(0,1fr) auto',
@@ -121,9 +127,36 @@ function ProspectRow({
         {initials(name)}
       </span>
       <span style={{ minWidth: 0 }}>
-        <span style={{ display: 'block', fontSize: 14, fontWeight: 700, letterSpacing: '0.02em' }}>
+        <a
+          href={linkedin}
+          target="_blank"
+          rel="noopener noreferrer"
+          title={verified ? 'LinkedIn profile' : 'LinkedIn search — profile not verified'}
+          style={{
+            display: 'inline-flex',
+            alignItems: 'baseline',
+            gap: 8,
+            fontSize: 14,
+            fontWeight: 700,
+            letterSpacing: '0.02em',
+            textDecoration: 'underline',
+            textDecorationColor: 'var(--gw-gray-1)',
+            textUnderlineOffset: 4,
+          }}
+        >
           {name}
-        </span>
+          <span
+            style={{
+              fontSize: 9.5,
+              fontWeight: 400,
+              letterSpacing: '0.18em',
+              color: verified ? accent : 'var(--gw-gray-2)',
+              textTransform: 'uppercase',
+            }}
+          >
+            {verified ? 'in ↗' : 'search ↗'}
+          </span>
+        </a>
         <span
           style={{
             display: 'block',
@@ -138,18 +171,22 @@ function ProspectRow({
           {title}
         </span>
       </span>
-      <span
+      <Link
+        href={`/${slug}`}
+        className="hover-invert"
         style={{
           fontSize: 11.5,
           letterSpacing: '0.14em',
           color: accent,
           whiteSpace: 'nowrap',
           flexShrink: 0,
+          padding: '6px 8px',
+          border: '1px solid var(--gw-gray-1)',
         }}
       >
         /{slug} →
-      </span>
-    </Link>
+      </Link>
+    </div>
   )
 }
 
@@ -313,8 +350,10 @@ $ → /${example.slug}  [ READY ]`}</Ascii>
               >
                 Publicly named leadership at {clients.length} Series A defense-autonomy companies,
                 taken from each company&apos;s own funding announcements. Titles checked September
-                2026 — confirm on LinkedIn before outreach. Every row links to the page that contact
-                would receive.
+                2026. Names link to LinkedIn — a verified profile where marked{' '}
+                <span style={{ color: 'var(--gw-bone)' }}>in</span>, otherwise a LinkedIn search, so
+                no profile is guessed. Company names link to their sites; the URL on each row is the
+                page that contact would receive.
               </p>
             </div>
             <span style={{ fontSize: 11, letterSpacing: '0.22em', color: 'var(--gw-gray-3)' }}>
@@ -331,10 +370,15 @@ $ → /${example.slug}  [ READY ]`}</Ascii>
                       name={client.clientName}
                       mark={client.logoMark}
                       src={client.clientLogoSrc}
+                      website={client.website}
                       color={client.accent}
                       size={26}
                     />
-                    <span
+                    <a
+                      href={client.website}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      title={client.website}
                       style={{
                         fontSize: 14,
                         fontWeight: 700,
@@ -343,10 +387,24 @@ $ → /${example.slug}  [ READY ]`}</Ascii>
                         minWidth: 0,
                         overflow: 'hidden',
                         textOverflow: 'ellipsis',
+                        textDecoration: 'underline',
+                        textDecorationColor: 'var(--gw-gray-1)',
+                        textUnderlineOffset: 4,
                       }}
                     >
                       {client.clientName}
-                    </span>
+                      <span
+                        style={{
+                          marginLeft: 8,
+                          fontSize: 9.5,
+                          fontWeight: 400,
+                          letterSpacing: '0.18em',
+                          color: 'var(--gw-gray-2)',
+                        }}
+                      >
+                        ↗
+                      </span>
+                    </a>
                   </div>
                   <div
                     style={{
@@ -389,6 +447,8 @@ $ → /${example.slug}  [ READY ]`}</Ascii>
                     title={p.title}
                     slug={client.slug}
                     accent={client.accent}
+                    linkedin={p.linkedin}
+                    verified={p.linkedinVerified}
                     highlight={p.name === EXAMPLE_CONTACT}
                   />
                 ))}

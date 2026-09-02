@@ -1,17 +1,27 @@
+'use client'
+
+import { useState } from 'react'
+
 import type { LogoMark } from '@/lib/clients'
 
 /**
  * Client mark in the co-branded lockup.
  *
- * Precedence: a real logo file (`src`) wins; a generated mark (`mark`) is for
- * hypothetical demo companies only; everything else gets a neutral monogram.
- * The monogram is deliberately generic — a real company never gets a made-up
- * logo attached to its name.
+ * Precedence:
+ *   1. `src`     — a real logo file under /public. Always wins.
+ *   2. `website` — the company's real favicon, fetched by the visitor's
+ *                  browser from a favicon service. Falls through on error.
+ *   3. `mark`    — a generated shape, for hypothetical demo companies only.
+ *   4. monogram  — neutral initials in a bordered box.
+ *
+ * A real company never gets a made-up logo attached to its name: it gets its
+ * own favicon or the neutral monogram, nothing in between.
  */
 export function ClientLogo({
   name,
   mark,
   src,
+  website,
   size = 26,
   color,
   title,
@@ -19,15 +29,47 @@ export function ClientLogo({
   name: string
   mark?: LogoMark
   src?: string
+  website?: string
   size?: number
   color?: string
   title?: string
 }) {
+  const [remoteFailed, setRemoteFailed] = useState(false)
   const label = title ?? `${name} logo`
 
   if (src) {
     // eslint-disable-next-line @next/next/no-img-element
-    return <img src={src} alt={label} height={size} style={{ display: 'block', height: size, width: 'auto' }} />
+    return (
+      <img
+        src={src}
+        alt={label}
+        height={size}
+        style={{ display: 'block', height: size, width: 'auto', flexShrink: 0 }}
+      />
+    )
+  }
+
+  if (website && !remoteFailed) {
+    const domain = website.replace(/^https?:\/\//, '').replace(/\/.*$/, '')
+    return (
+      // eslint-disable-next-line @next/next/no-img-element
+      <img
+        src={`https://www.google.com/s2/favicons?domain=${domain}&sz=128`}
+        alt={label}
+        width={size}
+        height={size}
+        onError={() => setRemoteFailed(true)}
+        style={{
+          display: 'block',
+          width: size,
+          height: size,
+          objectFit: 'contain',
+          flexShrink: 0,
+          background: '#fff',
+          padding: Math.round(size * 0.08),
+        }}
+      />
+    )
   }
 
   const common = {
@@ -42,7 +84,6 @@ export function ClientLogo({
   }
 
   if (mark === 'delta') {
-    // Swept delta planform, climbing.
     return (
       <svg {...common}>
         <path
@@ -58,7 +99,6 @@ export function ClientLogo({
   }
 
   if (mark === 'hull') {
-    // Armoured plate crossed by one line.
     return (
       <svg {...common}>
         <path
@@ -74,7 +114,6 @@ export function ClientLogo({
   }
 
   if (mark === 'meridian') {
-    // Globe crossed by its meridian, with a fix at centre.
     return (
       <svg {...common}>
         <circle cx="16" cy="16" r="12" strokeWidth="2" fill="currentColor" fillOpacity="0.08" />
@@ -85,7 +124,6 @@ export function ClientLogo({
     )
   }
 
-  // Neutral monogram: initials in a bordered box, in the accent.
   const initials = name
     .split(/\s+/)
     .filter(Boolean)

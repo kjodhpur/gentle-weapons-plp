@@ -6,6 +6,11 @@
  * scraped or guessed. Titles were checked in September 2026 and people move —
  * confirm on LinkedIn before sending anything.
  *
+ * `linkedin` is a profile URL only when it was found as a linkedin.com result
+ * for that exact person and company (`linkedinVerified: true`). Otherwise it
+ * is a LinkedIn people search for the name + company — a guessed profile slug
+ * would send a prospect's link to a stranger, so none are guessed.
+ *
  * Only founders and C-level are listed, because those are the roles the
  * companies announce. The engineering leads who would actually evaluate a
  * platform layer are usually not public; OPEN_ROLES names the ones to find.
@@ -19,6 +24,13 @@ export type Prospect = {
   clientSlug: string
   /** Where the name and title were publicly stated. */
   source: string
+  /** Verified profile URL, or a LinkedIn people search when not verified. */
+  linkedin: string
+  linkedinVerified: boolean
+}
+
+function linkedinSearch(name: string, company: string): string {
+  return `https://www.linkedin.com/search/results/people/?keywords=${encodeURIComponent(`${name} ${company}`)}`
 }
 
 export const PROSPECTS: Prospect[] = [
@@ -30,6 +42,8 @@ export const PROSPECTS: Prospect[] = [
     clientSlug: 'scout-ai',
     source:
       'https://www.prnewswire.com/news-releases/scout-ai-raises-100m-series-a-to-build-the-ai-brain-for-unmanned-warfare-302756871.html',
+    linkedin: 'https://www.linkedin.com/in/colby-adcock-277ab42a',
+    linkedinVerified: true,
   },
   {
     name: 'Collin Otis',
@@ -38,6 +52,8 @@ export const PROSPECTS: Prospect[] = [
     clientSlug: 'scout-ai',
     source:
       'https://www.prnewswire.com/news-releases/scout-ai-raises-100m-series-a-to-build-the-ai-brain-for-unmanned-warfare-302756871.html',
+    linkedin: 'https://www.linkedin.com/in/collinotis/',
+    linkedinVerified: true,
   },
 
   // Vermeer — $10M Series A, October 2025
@@ -48,6 +64,8 @@ export const PROSPECTS: Prospect[] = [
     clientSlug: 'vermeer',
     source:
       'https://dronelife.com/2025/10/23/vermeer-secures-10-million-series-a-to-advance-gps-free-drone-navigation-for-defense-and-dual-use-applications/',
+    linkedin: 'https://www.linkedin.com/in/brianstreem/',
+    linkedinVerified: true,
   },
   {
     name: 'Suresh Kumar',
@@ -56,6 +74,8 @@ export const PROSPECTS: Prospect[] = [
     clientSlug: 'vermeer',
     source:
       'https://dronelife.com/2025/10/23/vermeer-secures-10-million-series-a-to-advance-gps-free-drone-navigation-for-defense-and-dual-use-applications/',
+    linkedin: 'https://www.linkedin.com/in/vsureshkumar/',
+    linkedinVerified: true,
   },
 
   // Blue Water Autonomy — $50M Series A, August 2025
@@ -66,6 +86,8 @@ export const PROSPECTS: Prospect[] = [
     clientSlug: 'blue-water-autonomy',
     source:
       'https://www.prnewswire.com/news-releases/blue-water-autonomy-announces-50-million-series-a-led-by-gv-to-strengthen-us-maritime-power-with-autonomous-unmanned-ships-302538277.html',
+    linkedin: 'https://www.linkedin.com/in/rylanhamilton/',
+    linkedinVerified: true,
   },
   {
     name: 'Scott Miller',
@@ -74,14 +96,18 @@ export const PROSPECTS: Prospect[] = [
     clientSlug: 'blue-water-autonomy',
     source:
       'https://www.prnewswire.com/news-releases/blue-water-autonomy-announces-50-million-series-a-led-by-gv-to-strengthen-us-maritime-power-with-autonomous-unmanned-ships-302538277.html',
+    linkedin: 'https://www.linkedin.com/in/scottnmiller/',
+    linkedinVerified: true,
   },
   {
     name: 'Austin Gray',
-    title: 'Co-founder',
+    title: 'Co-founder & Chief Strategy Officer',
     company: 'Blue Water Autonomy',
     clientSlug: 'blue-water-autonomy',
     source:
       'https://www.prnewswire.com/news-releases/blue-water-autonomy-announces-50-million-series-a-led-by-gv-to-strengthen-us-maritime-power-with-autonomous-unmanned-ships-302538277.html',
+    linkedin: 'https://www.linkedin.com/in/austinelliottgray/',
+    linkedinVerified: true,
   },
 
   // CX2 — $31M Series A, May 2025
@@ -91,6 +117,8 @@ export const PROSPECTS: Prospect[] = [
     company: 'CX2',
     clientSlug: 'cx2',
     source: 'https://www.cx2.com/company',
+    linkedin: 'https://www.linkedin.com/in/nmintz/',
+    linkedinVerified: true,
   },
   {
     name: 'Lee Thompson',
@@ -98,6 +126,9 @@ export const PROSPECTS: Prospect[] = [
     company: 'CX2',
     clientSlug: 'cx2',
     source: 'https://www.cx2.com/company',
+    // Common name; no result could be tied to CX2 with confidence.
+    linkedin: linkedinSearch('Lee Thompson', 'CX2'),
+    linkedinVerified: false,
   },
   {
     name: 'Mark Trefgarne',
@@ -105,6 +136,8 @@ export const PROSPECTS: Prospect[] = [
     company: 'CX2',
     clientSlug: 'cx2',
     source: 'https://www.cx2.com/company',
+    linkedin: 'https://www.linkedin.com/in/marktrefgarne/',
+    linkedinVerified: true,
   },
 
   // Picogrid — $45M Series A, May 2026
@@ -115,6 +148,8 @@ export const PROSPECTS: Prospect[] = [
     clientSlug: 'picogrid',
     source:
       'https://picogrid.com/newsroom/picogrid-raises-usd45m-series-a-to-build-the-open-integration-layer-for-modern-defense',
+    linkedin: 'https://www.linkedin.com/in/zanemountcastle/',
+    linkedinVerified: true,
   },
   {
     name: 'Dan Chirita',
@@ -123,6 +158,9 @@ export const PROSPECTS: Prospect[] = [
     clientSlug: 'picogrid',
     source:
       'https://picogrid.com/newsroom/picogrid-raises-usd45m-series-a-to-build-the-open-integration-layer-for-modern-defense',
+    // The only candidate profile could not be confirmed as the Picogrid Dan Chirita.
+    linkedin: linkedinSearch('Dan Chirita', 'Picogrid'),
+    linkedinVerified: false,
   },
   {
     name: 'Martin Slosarik',
@@ -131,6 +169,8 @@ export const PROSPECTS: Prospect[] = [
     clientSlug: 'picogrid',
     source:
       'https://picogrid.com/newsroom/picogrid-raises-usd45m-series-a-to-build-the-open-integration-layer-for-modern-defense',
+    linkedin: 'https://www.linkedin.com/in/slosarik/',
+    linkedinVerified: true,
   },
 ]
 

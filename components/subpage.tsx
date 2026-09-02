@@ -52,6 +52,7 @@ function SubNav({ config }: { config: ClientConfig }) {
             name={config.clientName}
             mark={config.logoMark}
             src={config.clientLogoSrc}
+            website={config.website}
             color={config.accent}
             size={26}
           />

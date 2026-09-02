@@ -98,7 +98,23 @@ Every page sets `robots: noindex, nofollow` in `app/layout.tsx` — these are me
 as links, not found by search.
 
 The `competitor` on each client is an informed assumption from what the company ships
-publicly, not confirmed. Treat it as a conversation opener.
+publicly, not confirmed. Treat it as a conversation opener. The same goes for `painPoints`:
+written from each company's public product descriptions, and the doctrine section says so.
+
+Links and logos on the index:
+
+- **Names link to LinkedIn.** A verified profile URL only where one was found as a
+  linkedin.com result for that exact person and company (`linkedinVerified: true`, shown as
+  `in ↗`). Otherwise a LinkedIn people search for name + company (`search ↗`). No profile
+  slug is guessed — a wrong one would send a prospect's link to a stranger.
+- **Company names link to `website`.** Only on the index. Landing pages stay a closed funnel.
+- **Logos are the companies' own favicons**, loaded in the visitor's browser from a favicon
+  service via `ClientLogo`, with the monogram as a fallback if the fetch fails. To use a
+  proper logo file instead, drop it in `/public/logos/` and set `clientLogoSrc` — it takes
+  precedence. These marks identify the company; they do not imply any relationship.
+- **Accent colors are chosen to fit, not extracted.** The build environment cannot reach the
+  companies' sites, so each `accent` is a thematic pick from the site palette. Set the real
+  brand hex on `accent` once you have looked at each site.
 
 ## Notes
 

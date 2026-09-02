@@ -245,6 +245,17 @@ export type ClientConfig = {
   round: string
   /** One line on why this company is a fit — shown on the index. */
   fit: string
+  /**
+   * The company's site. Drives the outbound link on the index and, via
+   * ClientLogo, the company's own favicon in the co-branded lockup.
+   */
+  website: string
+  /**
+   * Pain points written for this prospect, from what they ship publicly.
+   * When present they replace the shared PROBLEMS in the doctrine section,
+   * labelled "OBSERVED AT <COMPANY>". Three reads best.
+   */
+  painPoints?: { title: string; body: string }[]
 
   hero: {
     rev: string
@@ -289,7 +300,22 @@ export const clients: ClientConfig[] = [
     clientDescriptor: 'PHYSICAL AI · UNMANNED WARFARE',
     accent: ACCENTS.phosphor,
     round: 'Series A · $100M · Apr 2026',
+    website: 'https://scoutco.ai',
     fit: 'Fury is one model shipped to mixed UGV and UAS fleets, at the edge, in degraded comms — the exact rollout problem Poolboy and Poolnet exist for.',
+    painPoints: [
+      {
+        title: 'One model, many chassis.',
+        body: 'Fury is hardware-agnostic by design, so every partner UGV and airframe arrives with its own JetPack and CUDA state. A checkpoint validated on the G01 is not guaranteed to behave the same on the next platform unless the stack beneath it is pinned.',
+      },
+      {
+        title: 'Rollouts to a mixed fleet in degraded comms.',
+        body: 'Shipping a new checkpoint to a fleet built to operate without a link home means resumable, signed delivery with per-node acknowledgement — and a rollback that fires on telemetry, not on an operator noticing.',
+      },
+      {
+        title: 'Program scrutiny arrives before the platform team does.',
+        body: 'Army autonomy work brings SBOM, attestation, and CMMC questions to a company still measured in dozens of engineers. Answering them with a hardened base image is faster than building one.',
+      },
+    ],
     hero: {
       rev: 'REV 2026.09',
       headlineTop: 'The model is trained.',
@@ -322,7 +348,22 @@ export const clients: ClientConfig[] = [
     clientDescriptor: 'GPS-DENIED NAVIGATION',
     accent: ACCENTS.amber,
     round: 'Series A · $10M · Oct 2025',
+    website: 'https://www.getvermeer.com',
     fit: 'VPS already runs on an NVIDIA edge processor inside every equipped airframe, under electronic attack in Ukraine. That box needs a signed, immutable, updatable image — which is GWOS.',
+    painPoints: [
+      {
+        title: 'An NVIDIA box in every airframe, many of them under attack.',
+        body: 'VPS puts an edge processor and a terrain database on each aircraft. In Ukraine those aircraft update over bad links, under electronic attack, and rarely come back to a bench. The image on that box has to be immutable, signed, and able to recover on its own.',
+      },
+      {
+        title: 'Maps and models are big. Links are not.',
+        body: '3D terrain databases and updated matching models are large payloads. Delivery has to be delta, resumable, and bandwidth-aware, or it does not finish before the next sortie.',
+      },
+      {
+        title: 'Primes ask for attestation.',
+        body: 'Deployment alongside Lockheed Martin and Northrop Grumman means SBOM per image, attested boot, and a kernel that does not drift between what was qualified and what is flying.',
+      },
+    ],
     hero: {
       rev: 'REV 2026.09',
       headlineTop: 'Passive in the air.',
@@ -355,7 +396,22 @@ export const clients: ClientConfig[] = [
     clientDescriptor: 'AUTONOMOUS SHIPS',
     accent: ACCENTS.cyan,
     round: 'Series A · $50M · Aug 2025',
+    website: 'https://www.blw.ai',
     fit: 'A vessel operating on the open ocean for months is DDIL by definition, with no one aboard to recover a bad update. Signed OTA and no-brick rollback are the whole problem.',
+    painPoints: [
+      {
+        title: 'Months on station, nobody aboard.',
+        body: 'An update that fails on a vessel at sea is a lost vessel until a recovery crew reaches it. A/B partitions and automatic rollback to last-known-good turn that into a non-event.',
+      },
+      {
+        title: 'Satcom is the only link, and it degrades.',
+        body: 'Operators still need to reach the ship when the backhaul is intermittent. A self-forming mesh with policy-driven egress keeps a path open without depending on the horizon.',
+      },
+      {
+        title: 'The first vessel is one. The fleet is many.',
+        body: 'With the first autonomous ship launching in 2026, the rollout model has to be set now: staged waves, human go/no-go gates, and the SBOM and attestation the Navy will ask for.',
+      },
+    ],
     hero: {
       rev: 'REV 2026.09',
       headlineTop: 'Months at sea.',
@@ -388,7 +444,22 @@ export const clients: ClientConfig[] = [
     clientDescriptor: 'ELECTRONIC WARFARE',
     accent: ACCENTS.redact,
     round: 'Series A · $31M · May 2025',
+    website: 'https://www.cx2.com',
     fit: 'Attritable, ML-powered EW systems at the tactical edge live inside the fight for the spectrum. Their update path and their comms have to survive the same jamming they are built to win.',
+    painPoints: [
+      {
+        title: 'Attritable means many, cheap, and replaced often.',
+        body: 'A fleet expected to be lost and re-provisioned needs per-node identity, short-lived certificates, and signed images a new unit can take on without a depot visit.',
+      },
+      {
+        title: 'Your comms live in the spectrum you are fighting in.',
+        body: 'EW systems at the tactical edge cannot assume a clean link. The mesh they update and coordinate over has to form and heal itself inside the same contested spectrum.',
+      },
+      {
+        title: 'Models on EW hardware change faster than a depot cycle.',
+        body: 'Signals evolve, so the ML that classifies and targets them has to ship to fielded units on a cadence of days — with per-node acknowledgement and a rollback when a model regresses.',
+      },
+    ],
     hero: {
       rev: 'REV 2026.09',
       headlineTop: 'The spectrum is contested.',
@@ -421,7 +492,22 @@ export const clients: ClientConfig[] = [
     clientDescriptor: 'DEFENSE INTEGRATION LAYER',
     accent: ACCENTS.bone,
     round: 'Series A · $45M · May 2026',
+    website: 'https://picogrid.com',
     fit: 'Hardware-enabled software connecting 100+ military systems means edge nodes fielded at scale. Every one of them needs a hardened base and a fleet-wide, signed update path.',
+    painPoints: [
+      {
+        title: '100+ integrations means 100+ ways for edge configs to drift.',
+        body: 'An integration layer is only as consistent as the nodes it runs on. An immutable, attested base image means every fielded node runs the same verified bits, wherever it was provisioned.',
+      },
+      {
+        title: 'Deployed with the Pentagon, NATO, and allies. No two sites update alike.',
+        body: 'Rollouts to a node fleet spread across programs and countries need region targeting, bandwidth-aware resumable delivery, and last-known-good rollback per node.',
+      },
+      {
+        title: 'Integration deployments get program review.',
+        body: 'Sitting between a customer’s sensors and their C2 puts the platform in scope for SBOM, attestation, and CMMC questions. A hardened base with those answers built in shortens the review.',
+      },
+    ],
     hero: {
       rev: 'REV 2026.09',
       headlineTop: 'A hundred systems integrated.',

@@ -118,18 +118,35 @@ export function Hero({ config }: { config: ClientConfig }) {
 }
 
 export function Doctrine({ config, counter }: { config: ClientConfig; counter: string }) {
+  // Client-specific pain points take the place of the shared problems when
+  // the config supplies them, so the doctrine section reads as written for
+  // this prospect rather than for the market in general.
+  const tailored = config.painPoints?.length ? config.painPoints : undefined
+  const items = tailored
+    ? tailored.map((p, i) => ({
+        key: `pain-${i}`,
+        label: `PROBLEM_0${i + 1} — OBSERVED AT ${config.clientName.toUpperCase()}`,
+        title: p.title,
+        body: p.body,
+      }))
+    : config.problemOrder.map((key) => PROBLEMS[key])
+
   return (
     <Section id="doctrine">
       <SectionHead
         kicker="// OPERATING_DOCTRINE"
         title="The path to scale is treacherous."
+        lede={
+          tailored
+            ? `Where ${config.clientName}'s stack meets the field, as we read it from what you ship publicly. Correct us in the briefing.`
+            : undefined
+        }
         counter={counter}
       />
       <div className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-12">
-        {config.problemOrder.map((key) => {
-          const problem = PROBLEMS[key]
+        {items.map((problem) => {
           return (
-            <div key={key} style={{ borderTop: `2px solid ${config.accent}`, paddingTop: 18 }}>
+            <div key={problem.key} style={{ borderTop: `2px solid ${config.accent}`, paddingTop: 18 }}>
               <Kicker style={{ color: config.accent }}>{problem.label}</Kicker>
               <h3
                 style={{

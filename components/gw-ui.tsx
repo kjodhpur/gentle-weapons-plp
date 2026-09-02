@@ -64,11 +64,12 @@ export function SectionHead({
         justifyContent: 'space-between',
         alignItems: 'baseline',
         marginBottom: 40,
-        flexWrap: 'wrap',
-        gap: 12,
+        gap: 24,
       }}
     >
-      <div>
+      {/* Left side may shrink so a wide title wraps rather than pushing the
+          § counter onto its own line below the lede. */}
+      <div style={{ flex: '1 1 0', minWidth: 0 }}>
         <Kicker>{kicker}</Kicker>
         <DisplayHeading style={{ marginTop: 10 }}>{title}</DisplayHeading>
         {lede && (
@@ -85,7 +86,15 @@ export function SectionHead({
           </p>
         )}
       </div>
-      <span style={{ fontSize: 11, letterSpacing: '0.22em', color: 'var(--gw-gray-3)' }}>
+      <span
+        style={{
+          fontSize: 11,
+          letterSpacing: '0.22em',
+          color: 'var(--gw-gray-3)',
+          flexShrink: 0,
+          whiteSpace: 'nowrap',
+        }}
+      >
         {counter}
       </span>
     </div>
