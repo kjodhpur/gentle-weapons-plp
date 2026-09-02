@@ -49,10 +49,11 @@ function SubNav({ config }: { config: ClientConfig }) {
           </Link>
           <span style={{ color: 'var(--gw-gray-1)', flexShrink: 0 }}>×</span>
           <ClientLogo
+            name={config.clientName}
             mark={config.logoMark}
+            src={config.clientLogoSrc}
             color={config.accent}
             size={26}
-            title={`${config.clientName} logo`}
           />
           {/* The mark goes to the index, so the client name is the way back
               to this prospect's own landing page. */}

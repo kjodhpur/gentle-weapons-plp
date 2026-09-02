@@ -58,10 +58,11 @@ export function SiteNav({ config }: { config: ClientConfig }) {
           {/* Co-brand divider + prospect name */}
           <span style={{ color: 'var(--gw-gray-1)', flexShrink: 0 }}>×</span>
           <ClientLogo
+            name={config.clientName}
             mark={config.logoMark}
+            src={config.clientLogoSrc}
             color={config.accent}
             size={28}
-            title={`${config.clientName} logo`}
           />
           <span style={{ minWidth: 0 }}>
             <span

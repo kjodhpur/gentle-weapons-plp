@@ -78,6 +78,28 @@ One exception, and it is a resource request rather than a link a visitor can
 click: `app/globals.css` loads the display face from
 `https://gentleweapons.com/fonts/unicode.compacta.ttf`. See Notes below.
 
+## The prospect list is real — treat it accordingly
+
+The five companies in `lib/clients.ts` are real Series A defense-autonomy companies, chosen
+as ideal-fit prospects. Each entry carries its `round` (latest priced round as publicly
+announced) and a one-line `fit`. The contacts in `lib/prospects.ts` are founders and C-level
+publicly named in those companies' own funding announcements, each with a `source` URL. Nothing
+was scraped or guessed.
+
+Two rules follow from that:
+
+- **Verify before sending.** Rounds close and people move. Round data and titles were checked
+  in September 2026.
+- **No invented logos on real companies.** Real prospects get a neutral monogram from
+  `ClientLogo` until a real logo is supplied via `clientLogoSrc`. The generated `logoMark`
+  shapes are for hypothetical demo companies only.
+
+Every page sets `robots: noindex, nofollow` in `app/layout.tsx` — these are meant to be sent
+as links, not found by search.
+
+The `competitor` on each client is an informed assumption from what the company ships
+publicly, not confirmed. Treat it as a conversation opener.
+
 ## Notes
 
 - The display face (`AC Compacta`) is loaded by `@font-face` from

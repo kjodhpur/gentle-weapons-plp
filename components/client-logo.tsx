@@ -1,22 +1,35 @@
 import type { LogoMark } from '@/lib/clients'
 
 /**
- * Hypothetical marks for the sample prospect companies. These are invented
- * placeholders for invented companies — swap in a real client's mark when
- * one exists. Drawn with currentColor so each takes the client's accent,
- * and kept to simple geometry so they hold up at nav size.
+ * Client mark in the co-branded lockup.
+ *
+ * Precedence: a real logo file (`src`) wins; a generated mark (`mark`) is for
+ * hypothetical demo companies only; everything else gets a neutral monogram.
+ * The monogram is deliberately generic — a real company never gets a made-up
+ * logo attached to its name.
  */
 export function ClientLogo({
+  name,
   mark,
+  src,
   size = 26,
   color,
   title,
 }: {
-  mark: LogoMark
+  name: string
+  mark?: LogoMark
+  src?: string
   size?: number
   color?: string
   title?: string
 }) {
+  const label = title ?? `${name} logo`
+
+  if (src) {
+    // eslint-disable-next-line @next/next/no-img-element
+    return <img src={src} alt={label} height={size} style={{ display: 'block', height: size, width: 'auto' }} />
+  }
+
   const common = {
     width: size,
     height: size,
@@ -25,11 +38,11 @@ export function ClientLogo({
     stroke: 'currentColor',
     style: { color, display: 'block', flexShrink: 0 },
     role: 'img' as const,
-    'aria-label': title,
+    'aria-label': label,
   }
 
   if (mark === 'delta') {
-    // Vantage Aeronautics — a swept delta planform, climbing.
+    // Swept delta planform, climbing.
     return (
       <svg {...common}>
         <path
@@ -45,7 +58,7 @@ export function ClientLogo({
   }
 
   if (mark === 'hull') {
-    // Ironline Defense Systems — an armoured plate crossed by one iron line.
+    // Armoured plate crossed by one line.
     return (
       <svg {...common}>
         <path
@@ -60,13 +73,46 @@ export function ClientLogo({
     )
   }
 
-  // Meridian ISR — a globe crossed by its meridian, with a collection fix.
+  if (mark === 'meridian') {
+    // Globe crossed by its meridian, with a fix at centre.
+    return (
+      <svg {...common}>
+        <circle cx="16" cy="16" r="12" strokeWidth="2" fill="currentColor" fillOpacity="0.08" />
+        <ellipse cx="16" cy="16" rx="5.5" ry="12" strokeWidth="1.6" />
+        <path d="M4 16 L28 16" strokeWidth="1.6" />
+        <circle cx="16" cy="16" r="2.6" fill="currentColor" stroke="none" />
+      </svg>
+    )
+  }
+
+  // Neutral monogram: initials in a bordered box, in the accent.
+  const initials = name
+    .split(/\s+/)
+    .filter(Boolean)
+    .slice(0, 2)
+    .map((part) => part[0]?.toUpperCase() ?? '')
+    .join('')
+
   return (
-    <svg {...common}>
-      <circle cx="16" cy="16" r="12" strokeWidth="2" fill="currentColor" fillOpacity="0.08" />
-      <ellipse cx="16" cy="16" rx="5.5" ry="12" strokeWidth="1.6" />
-      <path d="M4 16 L28 16" strokeWidth="1.6" />
-      <circle cx="16" cy="16" r="2.6" fill="currentColor" stroke="none" />
-    </svg>
+    <span
+      role="img"
+      aria-label={label}
+      style={{
+        width: size,
+        height: size,
+        display: 'inline-flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        border: `1px solid ${color ?? '#fff'}`,
+        color: color ?? '#fff',
+        fontSize: Math.round(size * 0.42),
+        fontWeight: 700,
+        letterSpacing: '0.02em',
+        lineHeight: 1,
+        flexShrink: 0,
+      }}
+    >
+      {initials}
+    </span>
   )
 }

@@ -3,11 +3,14 @@
  *
  * Shared, factual product data lives in PRODUCTS and PROBLEMS — every client
  * page draws from the same source of truth. Per-prospect personalization is
- * expressed entirely in ClientConfig: URL, accent color, co-branded logo,
+ * expressed entirely in ClientConfig: URL, accent color, co-branded lockup,
  * section order, which product leads, and the CTA.
  */
 
-/** Which hypothetical mark a sample company uses. See components/client-logo.tsx. */
+/**
+ * Generated marks for hypothetical demo companies only. Real prospects omit
+ * `logoMark` and get a neutral monogram — never a made-up logo on a real name.
+ */
 export type LogoMark = 'delta' | 'hull' | 'meridian'
 
 export type ProductKey = 'gwos' | 'poolnet' | 'poolboy'
@@ -218,20 +221,30 @@ export const ACCENTS = {
   phosphor: '#00ff88',
   cyan: '#00e5ff',
   amber: '#ffb000',
+  redact: '#ff3b3b',
+  bone: '#e6e6e6',
 } as const
 
 export type ClientConfig = {
   /** Distinct URL: the page renders at /<slug>. */
   slug: string
   clientName: string
-  /** Sits under the co-branded lockup, e.g. "UAS AUTONOMY". */
+  /** Sits under the co-branded lockup, e.g. "GPS-DENIED NAVIGATION". */
   clientDescriptor: string
   /** Accent color driving pills, [ OK ] rows, and card offsets. */
   accent: string
-  /** Optional client logo under /public; falls back to a text lockup. */
+  /** Optional real client logo under /public. Takes precedence over everything. */
   clientLogoSrc?: string
-  /** Hypothetical mark used until a real client logo is supplied. */
-  logoMark: LogoMark
+  /** Generated mark — for hypothetical demo companies only. Omit for real prospects. */
+  logoMark?: LogoMark
+
+  /**
+   * Latest priced round, as publicly announced. Shown on the index so the
+   * list can be re-checked against the "Series A" filter as rounds move.
+   */
+  round: string
+  /** One line on why this company is a fit — shown on the index. */
+  fit: string
 
   hero: {
     rev: string
@@ -257,26 +270,68 @@ export type ClientConfig = {
    * The stack this prospect runs today. When set, the page renders the
    * matching comparison directly after the products section. Omit it and
    * that section simply does not appear.
+   *
+   * For the companies below this is an informed assumption from what they
+   * ship publicly, not confirmed — treat it as a conversation opener.
    */
   competitor?: AlternativeKey
 }
 
+/**
+ * Real Series A defense-autonomy companies selected as ideal-fit prospects.
+ * Company facts and round data come from each company's own funding
+ * announcements as of September 2026; verify before sending, as rounds move.
+ */
 export const clients: ClientConfig[] = [
   {
-    slug: 'vantage-aero',
-    clientName: 'Vantage Aeronautics',
-    clientDescriptor: 'UAS AUTONOMY',
-    logoMark: 'delta',
+    slug: 'scout-ai',
+    clientName: 'Scout AI',
+    clientDescriptor: 'PHYSICAL AI · UNMANNED WARFARE',
     accent: ACCENTS.phosphor,
+    round: 'Series A · $100M · Apr 2026',
+    fit: 'Fury is one model shipped to mixed UGV and UAS fleets, at the edge, in degraded comms — the exact rollout problem Poolboy and Poolnet exist for.',
     hero: {
-      rev: 'REV 2026.05',
-      headlineTop: "Your aircraft don't",
-      headlineBottom: 'come back for patches.',
-      lede: 'Hardened edge compute for UAS teams moving from flight test to fielded aircraft.',
+      rev: 'REV 2026.09',
+      headlineTop: 'The model is trained.',
+      headlineBottom: 'Now ship it to the fleet.',
+      lede: 'Signed model delivery for Fury across mixed ground and air fleets — in degraded comms, with a rollback that holds.',
       bullets: [
-        'GWOS turns Jetson developer kits into attestable, fielded compute.',
-        'Signed OTA and atomic rollback for airframes you cannot recover by hand.',
-        'Built for teams on the path to a program of record.',
+        'Poolboy ships weights and binaries to every platform Fury runs on, with per-node acknowledgement.',
+        'GWOS pins CUDA and TensorRT so the checkpoint that passed eval is the one that runs.',
+        'Poolnet carries the rollout when the link home is gone.',
+      ],
+      flag: '[ CONTACT FOR BRIEFING ]',
+    },
+    ctaLabel: 'Request_Access',
+    sectionOrder: ['products', 'deployment', 'doctrine', 'company'],
+    productOrder: ['poolboy', 'gwos', 'poolnet'],
+    problemOrder: ['model-delivery', 'os-sidequests', 'links-degrade'],
+    marquee: [
+      '// MIXED FLEET · UGV + UAS',
+      'SIGNED_MODEL_DELIVERY',
+      'CANARY → WAVE → FLEET',
+      'DEGRADED_COMMS',
+      'PINNED CUDA / TENSORRT',
+      'LKG_ROLLBACK',
+    ],
+    competitor: 'balena',
+  },
+  {
+    slug: 'vermeer',
+    clientName: 'Vermeer',
+    clientDescriptor: 'GPS-DENIED NAVIGATION',
+    accent: ACCENTS.amber,
+    round: 'Series A · $10M · Oct 2025',
+    fit: 'VPS already runs on an NVIDIA edge processor inside every equipped airframe, under electronic attack in Ukraine. That box needs a signed, immutable, updatable image — which is GWOS.',
+    hero: {
+      rev: 'REV 2026.09',
+      headlineTop: 'Passive in the air.',
+      headlineBottom: 'Attested on the ground.',
+      lede: 'A signed, immutable image for the NVIDIA edge processor inside every VPS-equipped airframe.',
+      bullets: [
+        'GWOS locks the JetPack stack so a map-matching pipeline behaves identically across the fleet.',
+        'Signed delta OTA for terrain-map and model updates over low-bandwidth links.',
+        'Attested boot and SBOM per image — what primes ask for on the path to procurement.',
       ],
       flag: '[ CONTACT FOR BRIEFING ]',
     },
@@ -285,78 +340,113 @@ export const clients: ClientConfig[] = [
     productOrder: ['gwos', 'poolboy', 'poolnet'],
     problemOrder: ['os-sidequests', 'model-delivery', 'links-degrade'],
     marquee: [
-      '// NVIDIA JETSON ORIN',
-      'UAS_READY',
-      'SIGNED_OTA',
-      'ATOMIC_ROLLBACK',
-      'SBOM / FIPS 140-3 TRACK',
-      'FLIGHT_TEST → FIELDED',
+      '// NVIDIA EDGE PROCESSOR',
+      'GPS_DENIED',
+      'EO / IR PASSIVE',
+      'IMMUTABLE_ROOTFS',
+      'SIGNED_DELTA_OTA',
+      'SBOM / ATTESTED BOOT',
     ],
     competitor: 'yocto',
   },
   {
-    slug: 'ironline-defense',
-    clientName: 'Ironline Defense Systems',
-    clientDescriptor: 'GROUND VEHICLE PRIME',
-    logoMark: 'hull',
-    accent: ACCENTS.amber,
-    hero: {
-      rev: 'REV 2026.05',
-      headlineTop: 'The vehicles are fielded.',
-      headlineBottom: 'The software still ships.',
-      lede: 'Fleet-scale software deployment for ground vehicle programs already in the field.',
-      bullets: [
-        'Poolboy ships models and binaries to vehicles in test and deployment.',
-        'Canary, wave, and region targeting with per-node cryptographic acknowledgement.',
-        'Two-operator gates and audit trails your program office will ask for.',
-      ],
-      flag: '[ CONTACT FOR BRIEFING ]',
-    },
-    ctaLabel: 'Request_Full_Spec',
-    sectionOrder: ['deployment', 'products', 'doctrine', 'company'],
-    productOrder: ['poolboy', 'gwos', 'poolnet'],
-    problemOrder: ['model-delivery', 'os-sidequests', 'links-degrade'],
-    marquee: [
-      '// GROUND COMBAT VEHICLE',
-      'FLEET_SCALE_ROLLOUT',
-      'CANARY → WAVE → FLEET',
-      'LKG_ROLLBACK · NO-BRICK',
-      'CMMC L2 ROADMAP',
-      'TWO-OPERATOR GATES',
-    ],
-    competitor: 'mender',
-  },
-  {
-    slug: 'meridian-isr',
-    clientName: 'Meridian ISR',
-    clientDescriptor: 'ISR INTEGRATOR',
-    logoMark: 'meridian',
+    slug: 'blue-water-autonomy',
+    clientName: 'Blue Water Autonomy',
+    clientDescriptor: 'AUTONOMOUS SHIPS',
     accent: ACCENTS.cyan,
+    round: 'Series A · $50M · Aug 2025',
+    fit: 'A vessel operating on the open ocean for months is DDIL by definition, with no one aboard to recover a bad update. Signed OTA and no-brick rollback are the whole problem.',
     hero: {
-      rev: 'REV 2026.05',
-      headlineTop: "Collection doesn't pause",
-      headlineBottom: 'when the link goes dark.',
-      lede: 'Partition-tolerant mesh networking for ISR collection in contested spectrum.',
+      rev: 'REV 2026.09',
+      headlineTop: 'Months at sea.',
+      headlineBottom: 'No one aboard to reboot it.',
+      lede: 'Signed OTA and last-known-good rollback for a vessel that cannot be recovered by hand.',
       bullets: [
-        'Poolnet self-forms and heals without backhaul, egress optional.',
-        'Quantum-safe encrypted links with short-lived per-node certificates.',
-        'Designed for disconnected, degraded, intermittent, and limited operations.',
+        'A/B images with atomic rollback — an update that fails at sea reverts on its own.',
+        'Poolnet keeps operators reachable over degraded satcom, egress optional.',
+        'Poolboy stages rollouts across the fleet with human go/no-go gates.',
       ],
       flag: '[ CONTACT FOR BRIEFING ]',
     },
     ctaLabel: 'Request_Brief',
+    sectionOrder: ['deployment', 'products', 'doctrine', 'company'],
+    productOrder: ['gwos', 'poolnet', 'poolboy'],
+    problemOrder: ['links-degrade', 'os-sidequests', 'model-delivery'],
+    marquee: [
+      '// OPEN OCEAN · MONTHS ON STATION',
+      'DDIL_BY_DEFINITION',
+      'NO-BRICK ROLLBACK',
+      'DEGRADED_SATCOM',
+      'SIGNED_OTA',
+      'UNMANNED · UNRECOVERABLE',
+    ],
+    competitor: 'mender',
+  },
+  {
+    slug: 'cx2',
+    clientName: 'CX2',
+    clientDescriptor: 'ELECTRONIC WARFARE',
+    accent: ACCENTS.redact,
+    round: 'Series A · $31M · May 2025',
+    fit: 'Attritable, ML-powered EW systems at the tactical edge live inside the fight for the spectrum. Their update path and their comms have to survive the same jamming they are built to win.',
+    hero: {
+      rev: 'REV 2026.09',
+      headlineTop: 'The spectrum is contested.',
+      headlineBottom: 'So is your update path.',
+      lede: 'Encrypted mesh and signed delivery for attritable EW systems operating inside a contested spectrum.',
+      bullets: [
+        'Poolnet forms and heals without backhaul — quantum-safe links, short-lived certs.',
+        'Signed, per-node-acknowledged rollouts for ML models on attritable hardware.',
+        'ITAR-aware supply chain and SBOM per image for the procurement conversation.',
+      ],
+      flag: '[ CONTACT FOR BRIEFING ]',
+    },
+    ctaLabel: 'Request_Full_Spec',
     sectionOrder: ['doctrine', 'products', 'deployment', 'company'],
-    productOrder: ['poolnet', 'gwos', 'poolboy'],
+    productOrder: ['poolnet', 'poolboy', 'gwos'],
     problemOrder: ['links-degrade', 'model-delivery', 'os-sidequests'],
     marquee: [
       '// CONTESTED SPECTRUM',
-      'DDIL_READY',
       'EW / JAMMING TOLERANT',
-      'SELF-FORMING MESH',
-      'EGRESS_OPTIONAL',
+      'ATTRITABLE_EDGE',
+      'SELF-HEALING MESH',
+      'SIGNED_ROLLOUTS',
       'ITAR_AWARE_SUPPLY_CHAIN',
     ],
     competitor: 'meshmerize',
+  },
+  {
+    slug: 'picogrid',
+    clientName: 'Picogrid',
+    clientDescriptor: 'DEFENSE INTEGRATION LAYER',
+    accent: ACCENTS.bone,
+    round: 'Series A · $45M · May 2026',
+    fit: 'Hardware-enabled software connecting 100+ military systems means edge nodes fielded at scale. Every one of them needs a hardened base and a fleet-wide, signed update path.',
+    hero: {
+      rev: 'REV 2026.09',
+      headlineTop: 'A hundred systems integrated.',
+      headlineBottom: 'One hardened base beneath.',
+      lede: 'A hardened, attestable base image and fleet-wide signed OTA for the edge hardware that carries an integration layer into the field.',
+      bullets: [
+        'GWOS gives every fielded node an immutable, attested rootfs with A/B rollback.',
+        'Poolboy rolls out to the node fleet in waves — canary first, per-node ack, LKG rollback.',
+        'CMMC L2 roadmap and SBOM per image, so integration deployments clear program review.',
+      ],
+      flag: '[ CONTACT FOR BRIEFING ]',
+    },
+    ctaLabel: 'Request_Brief',
+    sectionOrder: ['products', 'deployment', 'doctrine', 'company'],
+    productOrder: ['gwos', 'poolboy', 'poolnet'],
+    problemOrder: ['os-sidequests', 'model-delivery', 'links-degrade'],
+    marquee: [
+      '// 100+ SYSTEMS INTEGRATED',
+      'FIELDED_EDGE_NODES',
+      'IMMUTABLE_ROOTFS',
+      'FLEET_WAVE_ROLLOUT',
+      'CMMC L2 ROADMAP',
+      'SBOM_PER_IMAGE',
+    ],
+    competitor: 'ubuntu-core',
   },
 ]
 

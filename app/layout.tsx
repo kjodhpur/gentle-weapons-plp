@@ -12,6 +12,9 @@ export const metadata: Metadata = {
   icons: {
     icon: [{ url: '/icon.svg', type: 'image/svg+xml' }],
   },
+  // These pages name real prospect companies and people. They are meant to
+  // be sent as links, not discovered — keep them out of search indexes.
+  robots: { index: false, follow: false },
 }
 
 export const viewport: Viewport = {

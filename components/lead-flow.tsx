@@ -3,14 +3,14 @@ import Link from 'next/link'
 import { ClientLogo } from '@/components/client-logo'
 import { Ascii, DisplayHeading, Kicker, TerminalPanel } from '@/components/gw-ui'
 import { clients, getClient, PRODUCTS } from '@/lib/clients'
-import { initials, prospectsForClient } from '@/lib/prospects'
+import { initials, OPEN_ROLES, PROSPECTS, prospectsForClient } from '@/lib/prospects'
 
 const STAGES = [
   {
     n: '01',
     label: 'SOURCE',
     title: 'Contact identified',
-    lines: ['Name · title · company', 'Pulled from a prospect list', 'or a LinkedIn export'],
+    lines: ['Name · title · company', 'From a prospect list', 'or a LinkedIn export'],
   },
   {
     n: '02',
@@ -31,6 +31,10 @@ const STAGES = [
     lines: ['One landing page', 'plus 16 sub-pages', 'at a distinct URL'],
   },
 ]
+
+// The worked example the pipeline transcript walks through.
+const EXAMPLE_SLUG = 'scout-ai'
+const EXAMPLE_CONTACT = 'Colby Adcock'
 
 function Stage({ stage, accent }: { stage: (typeof STAGES)[number]; accent: string }) {
   return (
@@ -120,8 +124,6 @@ function ProspectRow({
         <span style={{ display: 'block', fontSize: 14, fontWeight: 700, letterSpacing: '0.02em' }}>
           {name}
         </span>
-        {/* Wraps rather than truncating — the title is the context that makes
-            the row worth reading. */}
         <span
           style={{
             display: 'block',
@@ -152,8 +154,8 @@ function ProspectRow({
 }
 
 export function LeadFlow() {
-  // The worked example the pipeline transcript walks through.
-  const example = getClient('ironline-defense')
+  const example = getClient(EXAMPLE_SLUG)
+  const exampleContact = PROSPECTS.find((p) => p.name === EXAMPLE_CONTACT)
 
   return (
     <>
@@ -250,14 +252,14 @@ export function LeadFlow() {
             ))}
           </div>
 
-          {/* Worked example */}
-          {example && (
+          {/* Worked example, read from live config so it cannot drift. */}
+          {example && exampleContact && (
             <div style={{ marginTop: 26 }}>
               <TerminalPanel title="plp_resolve.sh">
-                <Ascii color="var(--gw-bone)">{`$ plp resolve --contact "John White" --company "Ironline Defense Systems"
+                <Ascii color="var(--gw-bone)">{`$ plp resolve --contact "${exampleContact.name}" --company "${example.clientName}"
 
-  [ 01 ] SOURCE   name: John White · title: Chief Technology Officer
-  [ 02 ] MATCH    "Ironline Defense Systems"  ──▶  ironline-defense
+  [ 01 ] SOURCE   name: ${exampleContact.name} · title: ${exampleContact.title}
+  [ 02 ] MATCH    "${example.clientName}"  ──▶  ${example.slug}
   [ 03 ] RESOLVE  accent: ${example.accent}   lead: ${PRODUCTS[example.productOrder[0]].name}
                   competitor: ${example.competitor}   cta: ${example.ctaLabel}
                   sections: ${example.sectionOrder.join(' → ')}
@@ -298,7 +300,7 @@ $ → /${example.slug}  [ READY ]`}</Ascii>
             }}
           >
             <div>
-              <Kicker>// SAMPLE_CONTACTS</Kicker>
+              <Kicker>// TARGET_CONTACTS</Kicker>
               <DisplayHeading style={{ marginTop: 10 }}>Who gets which page.</DisplayHeading>
               <p
                 style={{
@@ -306,28 +308,31 @@ $ → /${example.slug}  [ READY ]`}</Ascii>
                   color: 'var(--gw-gray-3)',
                   fontSize: 14,
                   lineHeight: 1.65,
-                  maxWidth: 660,
+                  maxWidth: 700,
                 }}
               >
-                Invented demo contacts at the sample companies. Every row links to the page that
-                contact would receive.
+                Publicly named leadership at {clients.length} Series A defense-autonomy companies,
+                taken from each company&apos;s own funding announcements. Titles checked September
+                2026 — confirm on LinkedIn before outreach. Every row links to the page that contact
+                would receive.
               </p>
             </div>
             <span style={{ fontSize: 11, letterSpacing: '0.22em', color: 'var(--gw-gray-3)' }}>
-              9 CONTACTS · 3 COMPANIES
+              {PROSPECTS.length} CONTACTS · {clients.length} COMPANIES
             </span>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 md:gap-8">
             {clients.map((client) => (
               <div key={client.slug} style={{ border: '1px solid var(--gw-gray-1)', minWidth: 0 }}>
                 <div style={{ padding: '16px 16px 14px' }}>
                   <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
                     <ClientLogo
+                      name={client.clientName}
                       mark={client.logoMark}
+                      src={client.clientLogoSrc}
                       color={client.accent}
                       size={26}
-                      title={`${client.clientName} logo`}
                     />
                     <span
                       style={{
@@ -348,6 +353,17 @@ $ → /${example.slug}  [ READY ]`}</Ascii>
                       marginTop: 8,
                       fontSize: 10,
                       letterSpacing: '0.2em',
+                      color: client.accent,
+                      textTransform: 'uppercase',
+                    }}
+                  >
+                    {client.round}
+                  </div>
+                  <div
+                    style={{
+                      marginTop: 4,
+                      fontSize: 10,
+                      letterSpacing: '0.2em',
                       color: 'var(--gw-gray-2)',
                       textTransform: 'uppercase',
                     }}
@@ -355,6 +371,16 @@ $ → /${example.slug}  [ READY ]`}</Ascii>
                     {client.clientDescriptor} · leads with{' '}
                     {PRODUCTS[client.productOrder[0]].name} · {client.ctaLabel}
                   </div>
+                  <p
+                    style={{
+                      marginTop: 10,
+                      fontSize: 12.5,
+                      color: 'var(--gw-gray-3)',
+                      lineHeight: 1.55,
+                    }}
+                  >
+                    {client.fit}
+                  </p>
                 </div>
                 {prospectsForClient(client.slug).map((p) => (
                   <ProspectRow
@@ -363,16 +389,32 @@ $ → /${example.slug}  [ READY ]`}</Ascii>
                     title={p.title}
                     slug={client.slug}
                     accent={client.accent}
-                    highlight={p.name === 'John White'}
+                    highlight={p.name === EXAMPLE_CONTACT}
                   />
                 ))}
+                {OPEN_ROLES[client.slug]?.length ? (
+                  <div
+                    style={{
+                      borderTop: '1px solid var(--gw-gray-1)',
+                      padding: '12px 16px',
+                      fontSize: 10.5,
+                      color: 'var(--gw-gray-2)',
+                      letterSpacing: '0.12em',
+                      textTransform: 'uppercase',
+                      lineHeight: 1.6,
+                    }}
+                  >
+                    <span style={{ color: 'var(--gw-gray-3)' }}>&gt; ALSO_FIND </span>
+                    {OPEN_ROLES[client.slug].join(' · ')}
+                  </div>
+                ) : null}
               </div>
             ))}
           </div>
 
           <p style={{ marginTop: 26, fontSize: 11.5, color: 'var(--gw-gray-2)', lineHeight: 1.7 }}>
             Adding a company means one entry in <code>lib/clients.ts</code>; its 17 pages build at{' '}
-            <code>/&lt;slug&gt;</code> automatically. Contacts live in{' '}
+            <code>/&lt;slug&gt;</code> automatically. Contacts and their sources live in{' '}
             <code>lib/prospects.ts</code>.
           </p>
         </section>
@@ -395,7 +437,7 @@ $ → /${example.slug}  [ READY ]`}</Ascii>
           }}
         >
           <span>© 2026 Gentle Systems, Inc. · All rights reserved.</span>
-          <span>Internal · sample data</span>
+          <span>Internal · not indexed</span>
         </div>
       </footer>
     </>
