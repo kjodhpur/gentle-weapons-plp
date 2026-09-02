@@ -115,8 +115,8 @@ Links and logos on the index:
   `suresh-kumar.jpg`, `rylan-hamilton.jpg`, `scott-miller.jpg`, `austin-gray.jpg`,
   `nathan-mintz.jpg`, `lee-thompson.jpg`, `mark-trefgarne.jpg`, `zane-mountcastle.jpg`,
   `dan-chirita.jpg`, `martin-slosarik.jpg` (`.png` / `.webp` also work) — and the index shows
-  it next to their name at the next build, rendered in grayscale to match the site. No file, no
-  photo: the monogram stays. Company team pages and press kits are the right source; do not
+  it next to their name at the next build, in full color. No file, no photo: a gradient
+  placeholder in the lead product's color stays. Company team pages and press kits are the right source; do not
   scrape LinkedIn.
 - **Logos are the companies' own favicons**, loaded in the visitor's browser from a favicon
   service via `ClientLogo`, with the monogram as a fallback if the fetch fails. To use a

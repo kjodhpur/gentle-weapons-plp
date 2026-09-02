@@ -143,8 +143,6 @@ function ProspectRow({
             height: 42,
             objectFit: 'cover',
             border: `1px solid ${accent}`,
-            // Keep headshots inside the site's monochrome system.
-            filter: 'grayscale(1) contrast(1.08)',
             flexShrink: 0,
             display: 'block',
           }}
