@@ -32,7 +32,9 @@ Built with [Next.js](https://nextjs.org), bootstrapped with [v0](https://v0.app)
 Every prospect gets a full site under their own slug, not just one page:
 
 ```
-/<client>                              landing page
+/<client>                              company landing page
+/<client>/for/<person>                 that contact's page: greeted by name, hero
+                                       bullets for their role, START_HERE links
 /<client>/platform/<product>           gwos · poolnet · poolboy
 /<client>/<guide>                      secure-boot · immutable-linux · signed-ota
                                        deploy-software-to-jetson · mesh-network

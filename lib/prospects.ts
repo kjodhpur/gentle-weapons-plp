@@ -15,9 +15,13 @@
  * companies announce. The engineering leads who would actually evaluate a
  * platform layer are usually not public; OPEN_ROLES names the ones to find.
  */
+import type { Role } from '@/lib/clients'
+
 export type Prospect = {
   name: string
   title: string
+  /** Drives which hero variant that person's page shows. */
+  role: Role
   /** Company as it would appear on the contact's profile. */
   company: string
   /** The client config this company resolves to. */
@@ -37,6 +41,7 @@ export const PROSPECTS: Prospect[] = [
   // Scout AI — $100M Series A, April 2026
   {
     name: 'Colby Adcock',
+    role: 'executive',
     title: 'Co-founder & CEO',
     company: 'Scout AI',
     clientSlug: 'scout-ai',
@@ -47,6 +52,7 @@ export const PROSPECTS: Prospect[] = [
   },
   {
     name: 'Collin Otis',
+    role: 'technical',
     title: 'Co-founder & CTO',
     company: 'Scout AI',
     clientSlug: 'scout-ai',
@@ -59,6 +65,7 @@ export const PROSPECTS: Prospect[] = [
   // Vermeer — $10M Series A, October 2025
   {
     name: 'Brian Streem',
+    role: 'executive',
     title: 'Founder & CEO',
     company: 'Vermeer',
     clientSlug: 'vermeer',
@@ -69,6 +76,7 @@ export const PROSPECTS: Prospect[] = [
   },
   {
     name: 'Suresh Kumar',
+    role: 'technical',
     title: 'CTO',
     company: 'Vermeer',
     clientSlug: 'vermeer',
@@ -81,6 +89,7 @@ export const PROSPECTS: Prospect[] = [
   // Blue Water Autonomy — $50M Series A, August 2025
   {
     name: 'Rylan Hamilton',
+    role: 'executive',
     title: 'Co-founder & CEO',
     company: 'Blue Water Autonomy',
     clientSlug: 'blue-water-autonomy',
@@ -91,6 +100,7 @@ export const PROSPECTS: Prospect[] = [
   },
   {
     name: 'Scott Miller',
+    role: 'technical',
     title: 'Co-founder & CTO',
     company: 'Blue Water Autonomy',
     clientSlug: 'blue-water-autonomy',
@@ -101,6 +111,7 @@ export const PROSPECTS: Prospect[] = [
   },
   {
     name: 'Austin Gray',
+    role: 'executive',
     title: 'Co-founder & Chief Strategy Officer',
     company: 'Blue Water Autonomy',
     clientSlug: 'blue-water-autonomy',
@@ -113,6 +124,7 @@ export const PROSPECTS: Prospect[] = [
   // CX2 — $31M Series A, May 2025
   {
     name: 'Nathan Mintz',
+    role: 'executive',
     title: 'Co-founder & CEO',
     company: 'CX2',
     clientSlug: 'cx2',
@@ -122,6 +134,7 @@ export const PROSPECTS: Prospect[] = [
   },
   {
     name: 'Lee Thompson',
+    role: 'technical',
     title: 'Co-founder · Head of Hardware',
     company: 'CX2',
     clientSlug: 'cx2',
@@ -132,6 +145,7 @@ export const PROSPECTS: Prospect[] = [
   },
   {
     name: 'Mark Trefgarne',
+    role: 'executive',
     title: 'Co-founder & President',
     company: 'CX2',
     clientSlug: 'cx2',
@@ -143,6 +157,7 @@ export const PROSPECTS: Prospect[] = [
   // Picogrid — $45M Series A, May 2026
   {
     name: 'Zane Mountcastle',
+    role: 'executive',
     title: 'Co-founder & CEO',
     company: 'Picogrid',
     clientSlug: 'picogrid',
@@ -153,6 +168,7 @@ export const PROSPECTS: Prospect[] = [
   },
   {
     name: 'Dan Chirita',
+    role: 'technical',
     title: 'Co-founder & CTO',
     company: 'Picogrid',
     clientSlug: 'picogrid',
@@ -164,6 +180,7 @@ export const PROSPECTS: Prospect[] = [
   },
   {
     name: 'Martin Slosarik',
+    role: 'executive',
     title: 'Co-founder',
     company: 'Picogrid',
     clientSlug: 'picogrid',
@@ -184,6 +201,29 @@ export const OPEN_ROLES: Record<string, string[]> = {
   'blue-water-autonomy': ['Vehicle Software Lead', 'Head of Fleet / Ops'],
   cx2: ['Embedded Software Lead', 'Director of Programs'],
   picogrid: ['Hardware Platform Lead', 'Head of Deployments'],
+}
+
+/** URL-safe slug for a person: "Colby Adcock" -> "colby-adcock". */
+export function slugify(name: string): string {
+  return name
+    .toLowerCase()
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/(^-|-$)/g, '')
+}
+
+export function prospectSlug(p: Prospect): string {
+  return slugify(p.name)
+}
+
+/** Path of this person's own page. */
+export function prospectPath(p: Prospect): string {
+  return `/${p.clientSlug}/for/${prospectSlug(p)}`
+}
+
+export function getProspect(clientSlug: string, personSlug: string): Prospect | undefined {
+  return PROSPECTS.find((p) => p.clientSlug === clientSlug && prospectSlug(p) === personSlug)
 }
 
 /** Initials for the avatar monogram. */

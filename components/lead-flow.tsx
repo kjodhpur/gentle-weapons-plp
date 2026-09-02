@@ -3,7 +3,7 @@ import Link from 'next/link'
 import { ClientLogo } from '@/components/client-logo'
 import { Ascii, DisplayHeading, Kicker, TerminalPanel } from '@/components/gw-ui'
 import { clients, getClient, PRODUCT_COLORS, PRODUCTS } from '@/lib/clients'
-import { initials, OPEN_ROLES, PROSPECTS, prospectsForClient } from '@/lib/prospects'
+import { initials, OPEN_ROLES, PROSPECTS, prospectPath, prospectsForClient } from '@/lib/prospects'
 
 const STAGES = [
   {
@@ -28,7 +28,7 @@ const STAGES = [
     n: '04',
     label: 'EMIT',
     title: 'Pages generated',
-    lines: ['One landing page', 'plus 16 sub-pages', 'at a distinct URL'],
+    lines: ['A page per contact', 'plus the company site', 'at a distinct URL'],
   },
 ]
 
@@ -92,6 +92,7 @@ function ProspectRow({
   name,
   title,
   slug,
+  path,
   accent,
   linkedin,
   verified,
@@ -100,6 +101,8 @@ function ProspectRow({
   name: string
   title: string
   slug: string
+  /** This person's own page. */
+  path: string
   accent: string
   linkedin: string
   verified: boolean
@@ -180,7 +183,7 @@ function ProspectRow({
         </span>
       </span>
       <Link
-        href={`/${slug}`}
+        href={path}
         className="hover-invert"
         style={{
           fontSize: 13,
@@ -192,7 +195,7 @@ function ProspectRow({
           border: '1px solid var(--gw-gray-1)',
         }}
       >
-        /{slug} →
+        /{slug}/for/… →
       </Link>
     </div>
   )
@@ -308,9 +311,10 @@ export function LeadFlow() {
   [ 03 ] RESOLVE  accent: ${example.accent}   lead: ${PRODUCTS[example.productOrder[0]].name}
                   competitor: ${example.competitor}   cta: ${example.ctaLabel}
                   sections: ${example.sectionOrder.join(' → ')}
-  [ 04 ] EMIT     1 landing page + 16 sub-pages
+                  reader: ${exampleContact.role} → ${exampleContact.role === 'technical' ? 'stack + rollback bullets' : 'program-readiness bullets'}
+  [ 04 ] EMIT     1 page for ${exampleContact.name.split(' ')[0]} + company page + 16 sub-pages
 
-$ → /${example.slug}  [ READY ]`}</Ascii>
+$ → ${prospectPath(exampleContact)}  [ READY ]`}</Ascii>
               </TerminalPanel>
               <p
                 style={{
@@ -360,8 +364,8 @@ $ → /${example.slug}  [ READY ]`}</Ascii>
                 taken from each company&apos;s own funding announcements. Titles checked September
                 2026. Names link to LinkedIn — a verified profile where marked{' '}
                 <span style={{ color: 'var(--gw-bone)' }}>in</span>, otherwise a LinkedIn search, so
-                no profile is guessed. Company names link to their sites; the URL on each row is the
-                page that contact would receive.
+                no profile is guessed. Company names link to their sites; the URL on each row is that
+                person&apos;s own page — greeted by name, with bullets for their role.
               </p>
             </div>
             <span style={{ fontSize: 11, letterSpacing: '0.22em', color: 'var(--gw-gray-3)' }}>
@@ -454,6 +458,7 @@ $ → /${example.slug}  [ READY ]`}</Ascii>
                     name={p.name}
                     title={p.title}
                     slug={client.slug}
+                    path={prospectPath(p)}
                     accent={PRODUCT_COLORS[client.productOrder[0]]}
                     linkedin={p.linkedin}
                     verified={p.linkedinVerified}

@@ -14,6 +14,12 @@
 export type LogoMark = 'delta' | 'hull' | 'meridian'
 
 export type ProductKey = 'gwos' | 'poolnet' | 'poolboy'
+
+/**
+ * Which angle a contact cares about. Technical readers get the stack and
+ * rollback mechanics; executive readers get program readiness and risk.
+ */
+export type Role = 'technical' | 'executive'
 export type ProblemKey = 'os-sidequests' | 'links-degrade' | 'model-delivery'
 export type SectionKey = 'doctrine' | 'products' | 'deployment' | 'company'
 
@@ -261,6 +267,17 @@ export type ClientConfig = {
   /** One line on why this company is a fit — shown on the index. */
   fit: string
   /**
+   * The most recent public signal about the company — round, contract,
+   * deployment — as a dated strip under the hero manifest. Verified facts
+   * only; this is the line that proves the page was written this month.
+   */
+  recent: string
+  /**
+   * Hero lede and bullets by reader role. A per-person page picks the set
+   * matching that contact's role; the company page uses `hero` as written.
+   */
+  heroByRole: Record<Role, { lede: string; bullets: string[] }>
+  /**
    * The company's site. Drives the outbound link on the index and, via
    * ClientLogo, the company's own favicon in the co-branded lockup.
    */
@@ -322,6 +339,26 @@ export const clients: ClientConfig[] = [
     accent: ACCENTS.phosphor,
     round: 'Series A · $100M · Apr 2026',
     website: 'https://scoutco.ai',
+    recent:
+      'APR 2026 · $100M Series A led by Align Ventures and Draper Associates · U.S. Army UxS autonomy contract',
+    heroByRole: {
+      technical: {
+        lede: 'Pinned stacks, signed checkpoints, and a rollback that fires on telemetry — for every chassis Fury lands on.',
+        bullets: [
+          'GWOS pins CUDA / TensorRT / cuDNN per image, so the checkpoint that passed eval is the one that runs on the next platform.',
+          'Poolboy ships checkpoints canary → wave → fleet with per-node cryptographic ack, and rolls back to last-known-good on telemetry breach.',
+          'Poolnet carries the rollout with no backhaul — encrypted peer links, short-lived certs, partition-tolerant.',
+        ],
+      },
+      executive: {
+        lede: 'The platform layer under Fury, so scaling to programs does not stall on infrastructure.',
+        bullets: [
+          'One hardened base and one rollout plane across every partner platform Fury runs on — not a bespoke integration per chassis.',
+          'SBOM per image, attested boot, CMMC L2 roadmap: the answers Army program review asks for, without standing up a platform team.',
+          'Signed, auditable rollouts with human go/no-go gates — a story a program office can approve.',
+        ],
+      },
+    },
     productNotes: {
       gwos: 'Fury runs on whatever chassis a partner brings. GWOS gives every one of them the same pinned CUDA and TensorRT stack, so an eval result on the G01 means something on the next vehicle.',
       poolnet:
@@ -381,6 +418,26 @@ export const clients: ClientConfig[] = [
     accent: ACCENTS.phosphor,
     round: 'Series A · $10M · Oct 2025',
     website: 'https://www.getvermeer.com',
+    recent:
+      'OCT 2025 · $10M Series A extension led by Draper Associates · VPS fielded with the Armed Forces of Ukraine · in use with Lockheed Martin and Northrop Grumman',
+    heroByRole: {
+      technical: {
+        lede: 'An immutable, attested image for the NVIDIA edge processor in every VPS airframe.',
+        bullets: [
+          'Kernel-locked JetPack: the map-matching pipeline runs the same CUDA and TensorRT on every box in the fleet.',
+          'Signed delta OTA for terrain databases and models — resumable, bandwidth-aware, sized for the link the forward site actually has.',
+          'TPM-backed boot and A/B rootfs: an airframe that took a bad update recovers itself on the next boot.',
+        ],
+      },
+      executive: {
+        lede: 'Fleet-grade update and attestation for VPS, on the path from Ukraine deployments to prime contracts.',
+        bullets: [
+          'Primes ask for SBOM and attestation per image. GWOS ships both by default.',
+          'A signed update path means VPS improvements reach fielded aircraft in days, not on a depot cycle.',
+          'ITAR-aware, US-owned supply chain for the software beneath the sensor.',
+        ],
+      },
+    },
     productNotes: {
       gwos: 'The NVIDIA box in each airframe becomes an immutable, attested image with A/B rollback — the VPS pipeline that was qualified is the one that flies.',
       poolnet:
@@ -440,6 +497,26 @@ export const clients: ClientConfig[] = [
     accent: ACCENTS.phosphor,
     round: 'Series A · $50M · Aug 2025',
     website: 'https://www.blw.ai',
+    recent:
+      'AUG 2025 · $50M Series A led by GV · selected by the U.S. Navy for autonomous deep-ocean surveys · first full-size ship launching 2026',
+    heroByRole: {
+      technical: {
+        lede: 'A/B images, signed OTA, and a mesh that tolerates satcom dropping for hours.',
+        bullets: [
+          'Immutable rootfs with A/B partitions and atomic rollback — a failed update at sea reverts without a crew.',
+          'Poolnet keeps an encrypted operator path over degraded satcom: policy-driven egress, partition-tolerant.',
+          'Poolboy stages fleet rollouts in waves with per-node ack, so one hull proves an update before the rest take it.',
+        ],
+      },
+      executive: {
+        lede: 'No-brick updates and Navy-ready attestation for a vessel on station for months.',
+        bullets: [
+          'An update that cannot brick a vessel is the difference between a software release and a recovery sortie.',
+          'SBOM, attested boot, and auditable rollouts — what the Navy will ask for as survey work scales past the first hull.',
+          'Human go/no-go gates on every fleet rollout; operators stay in the loop from ashore.',
+        ],
+      },
+    },
     productNotes: {
       gwos: "A ship's compute gets an immutable base with A/B partitions: an update that fails at sea reverts on its own, with no one aboard and no recovery sortie.",
       poolnet:
@@ -499,6 +576,25 @@ export const clients: ClientConfig[] = [
     accent: ACCENTS.phosphor,
     round: 'Series A · $31M · May 2025',
     website: 'https://www.cx2.com',
+    recent: 'MAY 2025 · $31M Series A · attritable, ML-powered electronic warfare for the tactical edge',
+    heroByRole: {
+      technical: {
+        lede: 'Per-node identity, short-lived certs, and a self-healing mesh for attritable EW nodes.',
+        bullets: [
+          'Signed, immutable images with per-node identity: a replacement unit is trusted and current at first boot.',
+          'Poolnet forms and heals inside contested spectrum — encrypted peer links, egress optional.',
+          'Model rollouts to fielded units in days, per-node acknowledged, with rollback when a model regresses.',
+        ],
+      },
+      executive: {
+        lede: "A supply chain and update path that survive the same fight CX2's systems are built to win.",
+        bullets: [
+          'Attritable at scale needs fast re-provisioning. A hardened base makes each replacement unit a non-event.',
+          'ITAR-aware, US-owned software supply chain with SBOM per image for the procurement conversation.',
+          'Rollouts the program office can audit: signed, acknowledged, and reversible.',
+        ],
+      },
+    },
     productNotes: {
       gwos: 'Attritable units are re-provisioned constantly. A signed, immutable GWOS image with per-node identity means a replacement unit is trusted and current the moment it boots.',
       poolnet:
@@ -558,6 +654,25 @@ export const clients: ClientConfig[] = [
     accent: ACCENTS.phosphor,
     round: 'Series A · $45M · May 2026',
     website: 'https://picogrid.com',
+    recent: 'MAY 2026 · $45M Series A · integration layer connecting 100+ military systems',
+    heroByRole: {
+      technical: {
+        lede: 'One immutable base and one signed rollout plane for every fielded Picogrid node.',
+        bullets: [
+          'Attested rootfs with A/B rollback: 100+ integrations, zero configuration drift across nodes.',
+          'Region- and program-targeted rollouts, resumable over poor links, with per-node ack.',
+          "Poolnet gives nodes a self-forming secure path when the customer's network is not there yet.",
+        ],
+      },
+      executive: {
+        lede: 'A hardened base that shortens program review for every new Picogrid deployment.',
+        bullets: [
+          'SBOM, attestation, and a CMMC L2 roadmap built into the base image — fewer questions per deployment.',
+          'Consistent, auditable updates across Pentagon, NATO, and allied sites.',
+          'Scale deployments without scaling a platform team.',
+        ],
+      },
+    },
     productNotes: {
       gwos: 'Each fielded Picogrid node gets the same immutable, attested base image, so 100+ integrations do not become 100+ configuration drifts.',
       poolnet:

@@ -9,12 +9,46 @@ import {
   SectionHead,
   TerminalPanel,
 } from '@/components/gw-ui'
-import type { ClientConfig } from '@/lib/clients'
+import type { ClientConfig, ProductKey, Role } from '@/lib/clients'
 import { ALTERNATIVES, PRODUCT_COLORS, PRODUCTS, PROBLEMS } from '@/lib/clients'
+import type { Prospect } from '@/lib/prospects'
 import { guidesForProduct } from '@/lib/subpages'
 
-export function Hero({ config }: { config: ClientConfig }) {
+/** The guide that best introduces each product, for the START_HERE row. */
+const LEAD_GUIDE: Record<ProductKey, { key: string; label: string }> = {
+  gwos: { key: 'secure-boot', label: 'secure boot' },
+  poolnet: { key: 'mesh-network', label: 'mesh network' },
+  poolboy: { key: 'fleet-management', label: 'fleet management' },
+}
+
+/** Where a reader of a given role should go first on this site. */
+function startHere(config: ClientConfig, role: Role): { href: string; label: string }[] {
+  const lead = config.productOrder[0]
+  const alt = config.competitor
+    ? { href: `/${config.slug}/alternatives/${config.competitor}`, label: `vs ${config.competitor.replace(/-/g, ' ')}` }
+    : null
+  if (role === 'technical') {
+    return [
+      { href: `/${config.slug}/platform/${lead}`, label: `${PRODUCTS[lead].name} platform` },
+      { href: `/${config.slug}/${LEAD_GUIDE[lead].key}`, label: LEAD_GUIDE[lead].label },
+      ...(alt ? [alt] : []),
+    ]
+  }
+  return [
+    { href: '#deployment', label: 'how it fields' },
+    { href: '#company', label: 'who we are' },
+    ...(alt ? [alt] : []),
+  ]
+}
+
+export function Hero({ config, person }: { config: ClientConfig; person?: Prospect }) {
   const { hero } = config
+  // A person's page swaps in the lede and bullets for their role; the
+  // headline, context, and everything below stay the company's.
+  const variant = person ? config.heroByRole[person.role] : null
+  const lede = variant?.lede ?? hero.lede
+  const bullets = variant?.bullets ?? hero.bullets
+  const firstName = person?.name.split(/\s+/)[0]
 
   return (
     <section
@@ -38,7 +72,34 @@ export function Hero({ config }: { config: ClientConfig }) {
           <span style={{ color: 'var(--gw-gray-2)' }}>/</span>
           <span>{hero.rev}</span>
           <span style={{ color: 'var(--gw-gray-2)' }}>/</span>
-          <span>prepared for: {config.clientName}</span>
+          <span>
+            prepared for:{' '}
+            {person ? (
+              <span style={{ color: 'var(--gw-bone)' }}>
+                {person.name} · {person.title} · {config.clientName}
+              </span>
+            ) : (
+              config.clientName
+            )}
+          </span>
+        </div>
+
+        {/* The most recent public signal about this company — dated, so the
+            page visibly belongs to this month and not to a template. */}
+        <div
+          style={{
+            display: 'flex',
+            gap: 14,
+            alignItems: 'baseline',
+            marginTop: -12,
+            fontSize: 12,
+            letterSpacing: '0.14em',
+            textTransform: 'uppercase',
+            lineHeight: 1.6,
+          }}
+        >
+          <span style={{ color: config.accent, flexShrink: 0 }}>// SIGNAL</span>
+          <span style={{ color: 'var(--gw-gray-3)' }}>{config.recent}</span>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-[minmax(0,1.2fr)_minmax(0,0.8fr)] gap-8 md:gap-12">
@@ -53,6 +114,19 @@ export function Hero({ config }: { config: ClientConfig }) {
               margin: 0,
             }}
           >
+            {firstName && (
+              <span
+                style={{
+                  display: 'block',
+                  fontSize: '0.38em',
+                  letterSpacing: '0.02em',
+                  color: config.accent,
+                  marginBottom: '0.25em',
+                }}
+              >
+                {firstName} —
+              </span>
+            )}
             {hero.headlineTop}
             <br />
             {hero.headlineBottom}
@@ -80,7 +154,7 @@ export function Hero({ config }: { config: ClientConfig }) {
                 lineHeight: 1.15,
               }}
             >
-              {hero.lede}
+              {lede}
             </p>
             <p style={{ marginTop: 16, fontSize: 14.5, color: 'var(--gw-gray-3)', lineHeight: 1.65 }}>
               {config.hero.context}
@@ -93,11 +167,16 @@ export function Hero({ config }: { config: ClientConfig }) {
           style={{ marginTop: 24, border: '1px solid var(--gw-gray-1)', padding: '20px 24px' }}
         >
           <div style={{ display: 'flex', flexDirection: 'column', gap: 4, fontSize: 14, lineHeight: 1.7 }}>
-            {hero.bullets.map((bullet, i) => (
+            {person && (
+              <div style={{ color: 'var(--gw-gray-2)', fontSize: 11, letterSpacing: '0.2em', marginBottom: 4 }}>
+                &gt; READER: {person.role.toUpperCase()} · {person.title.toUpperCase()}
+              </div>
+            )}
+            {bullets.map((bullet, i) => (
               <div key={i}>
                 <span style={{ color: 'var(--gw-gray-2)', marginRight: 8 }}>&gt;</span>
                 {bullet}
-                {i === hero.bullets.length - 1 && (
+                {i === bullets.length - 1 && (
                   <span style={{ color: config.accent, marginLeft: 8 }}>{hero.flag}</span>
                 )}
               </div>
@@ -110,6 +189,27 @@ export function Hero({ config }: { config: ClientConfig }) {
           </div>
         </div>
       </div>
+
+      {/* On a person's page, point them at the three things their role
+          would read first rather than leaving them to scroll. */}
+      {person && (
+        <div
+          style={{
+            marginTop: 18,
+            display: 'flex',
+            alignItems: 'center',
+            gap: 12,
+            flexWrap: 'wrap',
+          }}
+        >
+          <Kicker>&gt; START_HERE</Kicker>
+          {startHere(config, person.role).map((l) => (
+            <BracketLink key={l.href} href={l.href}>
+              {l.label}
+            </BracketLink>
+          ))}
+        </div>
+      )}
 
       <Marquee items={config.marquee} />
     </section>
