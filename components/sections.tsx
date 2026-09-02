@@ -10,7 +10,7 @@ import {
   TerminalPanel,
 } from '@/components/gw-ui'
 import type { ClientConfig } from '@/lib/clients'
-import { PRODUCTS, PROBLEMS } from '@/lib/clients'
+import { ALTERNATIVES, PRODUCTS, PROBLEMS } from '@/lib/clients'
 
 export function Hero({ config }: { config: ClientConfig }) {
   const { hero } = config
@@ -383,6 +383,91 @@ export function Products({ config, counter }: { config: ClientConfig; counter: s
             </div>
           )
         })}
+      </div>
+    </Section>
+  )
+}
+
+/**
+ * Comparison against the stack the prospect runs today. Rendered only when
+ * the client config names a competitor.
+ */
+export function Competitor({ config, counter }: { config: ClientConfig; counter: string }) {
+  if (!config.competitor) return null
+  const alt = ALTERNATIVES[config.competitor]
+  const product = PRODUCTS[alt.product]
+
+  return (
+    <Section id="alternative">
+      <SectionHead
+        kicker={`// ALTERNATIVE · ${product.name.toUpperCase()}`}
+        title={alt.counter}
+        lede={`Where ${product.name} fits for teams already running this stack.`}
+        counter={counter}
+      />
+
+      <div style={{ position: 'relative' }}>
+        <div
+          aria-hidden
+          style={{
+            position: 'absolute',
+            inset: 0,
+            background: config.accent,
+            transform: 'translate(8px, 8px)',
+          }}
+        />
+        <div
+          className="grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)]"
+          style={{ position: 'relative', border: '2px solid #fff', background: '#000' }}
+        >
+          <div style={{ padding: '32px 36px', display: 'flex', flexDirection: 'column', gap: 20 }}>
+            <span
+              style={{
+                alignSelf: 'flex-start',
+                fontFamily: 'var(--font-display)',
+                fontSize: 'clamp(28px, 3.4vw, 44px)',
+                lineHeight: 1,
+                letterSpacing: '-0.01em',
+                color: config.accent,
+              }}
+            >
+              {alt.vs}
+            </span>
+            <p style={{ color: 'var(--gw-gray-3)', fontSize: 14.5, lineHeight: 1.7, margin: 0 }}>
+              Comparisons describe architectural fit for defense autonomy programs — not benchmarks
+              or endorsements.
+            </p>
+            <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap' }}>
+              <BracketLink href={alt.href}>full comparison</BracketLink>
+              <BracketLink href="#contact">{config.ctaLabel}</BracketLink>
+            </div>
+          </div>
+
+          <div
+            className="md:border-l md:border-[#333]"
+            style={{ padding: '32px 30px', display: 'flex', flexDirection: 'column', gap: 12 }}
+          >
+            <Kicker>&gt; WHY_TEAMS_SWITCH</Kicker>
+            <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'grid', gap: 10 }}>
+              {alt.points.map((point) => (
+                <li
+                  key={point}
+                  style={{
+                    display: 'grid',
+                    gridTemplateColumns: 'auto 1fr',
+                    gap: 14,
+                    fontSize: 13.5,
+                    lineHeight: 1.5,
+                    alignItems: 'baseline',
+                  }}
+                >
+                  <span style={{ color: config.accent }}>[ OK ]</span>
+                  <span style={{ color: 'var(--gw-bone)' }}>{point}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
       </div>
     </Section>
   )

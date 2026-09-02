@@ -6,22 +6,11 @@ export const metadata: Metadata = {
   title: 'Gentle Weapons',
   description: 'Personalized landing pages for Gentle Weapons prospective clients.',
   generator: 'v0.app',
+  // Scalable monogram derived from the wordmark. The production site's own
+  // /assets/favicon.svg and /assets/apple-touch-icon.png are the assets to
+  // swap in here once they're pulled off the live domain.
   icons: {
-    icon: [
-      {
-        url: '/icon-light-32x32.png',
-        media: '(prefers-color-scheme: light)',
-      },
-      {
-        url: '/icon-dark-32x32.png',
-        media: '(prefers-color-scheme: dark)',
-      },
-      {
-        url: '/icon.svg',
-        type: 'image/svg+xml',
-      },
-    ],
-    apple: '/apple-icon.png',
+    icon: [{ url: '/icon.svg', type: 'image/svg+xml' }],
   },
 }
 

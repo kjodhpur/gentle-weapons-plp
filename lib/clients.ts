@@ -117,6 +117,128 @@ export const PROBLEMS: Record<ProblemKey, Problem> = {
   },
 }
 
+export type AlternativeKey =
+  | 'yocto'
+  | 'ubuntu-core'
+  | 'kairos'
+  | 'mender'
+  | 'balena'
+  | 'foundries-io'
+  | 'meshmerize'
+
+export type Alternative = {
+  key: AlternativeKey
+  /** Which product the comparison argues for. */
+  product: ProductKey
+  /** Headline label, e.g. "VS YOCTO / OPENEMBEDDED". */
+  vs: string
+  /** The counter-argument headline. */
+  counter: string
+  /** The switch case, as [ OK ] rows. */
+  points: string[]
+  /** Canonical page on the production site. */
+  href: string
+}
+
+/**
+ * Competitor comparisons, mirroring the /alternatives/* pages. A client page
+ * renders one of these when its config names the stack that prospect already
+ * runs, so the page argues against their actual incumbent.
+ */
+export const ALTERNATIVES: Record<AlternativeKey, Alternative> = {
+  yocto: {
+    key: 'yocto',
+    product: 'gwos',
+    vs: 'VS YOCTO / OPENEMBEDDED',
+    counter: 'Control without the layer tax',
+    points: [
+      'Pre-integrated Jetson production image — not a from-scratch layer stack',
+      'Signed OTA and A/B rollback included',
+      'SBOM generation aligned to procurement review',
+      'Optional integration with Poolboy fleet rollout',
+    ],
+    href: 'https://gentleweapons.com/alternatives/yocto',
+  },
+  'ubuntu-core': {
+    key: 'ubuntu-core',
+    product: 'gwos',
+    vs: 'VS UBUNTU CORE',
+    counter: 'Where teams look beyond Ubuntu Core',
+    points: [
+      'Jetson-first image with kernel-locked NVIDIA JetPack stack',
+      'Signed OTA with A/B rollback — not just package confinement',
+      'SBOM and attestation metadata per production image',
+      'Interlocks with Poolboy payload rollout and Poolnet mesh',
+    ],
+    href: 'https://gentleweapons.com/alternatives/ubuntu-core',
+  },
+  kairos: {
+    key: 'kairos',
+    product: 'gwos',
+    vs: 'VS KAIROS',
+    counter: 'Immutable OS where you field inference',
+    points: [
+      'Immutable rootfs with A/B updates on Jetson hardware',
+      'Pinned NVIDIA JetPack components per image',
+      'Attested boot and SBOM for procurement review',
+      'Stack integration for mesh and payload rollout',
+    ],
+    href: 'https://gentleweapons.com/alternatives/kairos',
+  },
+  mender: {
+    key: 'mender',
+    product: 'poolboy',
+    vs: 'VS MENDER',
+    counter: 'OTA plus payload fleet control',
+    points: [
+      'GWOS handles Jetson OS image OTA with A/B rollback',
+      'Poolboy handles payload fleet waves and per-node ack',
+      'Poolnet delivers both when backhaul is unavailable',
+      'Human-authorized rollout gates for operational safety',
+    ],
+    href: 'https://gentleweapons.com/alternatives/mender',
+  },
+  balena: {
+    key: 'balena',
+    product: 'poolboy',
+    vs: 'VS BALENA',
+    counter: 'Fleet deploy beyond container push',
+    points: [
+      'Signed payload manifests with per-node acknowledgment',
+      'GWOS immutable Jetson images with A/B OS rollback',
+      'Poolnet delivery when cloud fleet backhaul is degraded',
+      'Human-authorized rollout waves for operational safety',
+    ],
+    href: 'https://gentleweapons.com/alternatives/balena',
+  },
+  'foundries-io': {
+    key: 'foundries-io',
+    product: 'poolboy',
+    vs: 'VS FOUNDRIES.IO',
+    counter: 'Platform OTA plus payload orchestration',
+    points: [
+      'Separate OS and payload rollout planes that interlock',
+      'Delivery over encrypted mesh when backhaul is absent',
+      'Human-authorized go/no-go gates for field operations',
+      'Rollback to last-known-good on telemetry breach',
+    ],
+    href: 'https://gentleweapons.com/alternatives/foundries-io',
+  },
+  meshmerize: {
+    key: 'meshmerize',
+    product: 'poolnet',
+    vs: 'VS MESHMERIZE',
+    counter: 'Mesh built for contested edge',
+    points: [
+      'Encrypted peer mesh with optional tethered egress',
+      'Partition healing without mandatory backhaul',
+      'Operator ACLs and time-boxed access',
+      'Shared stack with signed OTA and OS attestation',
+    ],
+    href: 'https://gentleweapons.com/alternatives/meshmerize',
+  },
+}
+
 /** Accent options, matching the production palette. */
 export const ACCENTS = {
   phosphor: '#00ff88',
@@ -155,6 +277,12 @@ export type ClientConfig = {
   problemOrder: ProblemKey[]
   /** Ticker items under the hero. */
   marquee: string[]
+  /**
+   * The stack this prospect runs today. When set, the page renders the
+   * matching comparison directly after the products section. Omit it and
+   * that section simply does not appear.
+   */
+  competitor?: AlternativeKey
 }
 
 export const clients: ClientConfig[] = [
@@ -187,6 +315,7 @@ export const clients: ClientConfig[] = [
       'SBOM / FIPS 140-3 TRACK',
       'FLIGHT_TEST → FIELDED',
     ],
+    competitor: 'yocto',
   },
   {
     slug: 'ironline-defense',
@@ -217,6 +346,7 @@ export const clients: ClientConfig[] = [
       'CMMC L2 ROADMAP',
       'TWO-OPERATOR GATES',
     ],
+    competitor: 'mender',
   },
   {
     slug: 'meridian-isr',
@@ -247,6 +377,7 @@ export const clients: ClientConfig[] = [
       'EGRESS_OPTIONAL',
       'ITAR_AWARE_SUPPLY_CHAIN',
     ],
+    competitor: 'meshmerize',
   },
 ]
 

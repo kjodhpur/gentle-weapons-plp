@@ -1,10 +1,25 @@
 import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 
-import { Company, Contact, Deployment, Doctrine, Hero, Products, SiteFooter } from '@/components/sections'
+import {
+  Company,
+  Competitor,
+  Contact,
+  Deployment,
+  Doctrine,
+  Hero,
+  Products,
+  SiteFooter,
+} from '@/components/sections'
 import { SiteNav } from '@/components/site-nav'
-import type { SectionKey } from '@/lib/clients'
+import type { ClientConfig, SectionKey } from '@/lib/clients'
 import { clients, getClient } from '@/lib/clients'
+
+/** One rendered body section: a stable key plus the component to render. */
+type BodySection = {
+  key: string
+  Component: (props: { config: ClientConfig; counter: string }) => React.ReactElement | null
+}
 
 export function generateStaticParams() {
   return clients.map((c) => ({ client: c.slug }))
@@ -44,19 +59,30 @@ export default async function ClientLandingPage({
   const config = getClient(client)
   if (!config) notFound()
 
+  // Body sections in the client's declared order, with the competitor
+  // comparison slotted in directly after the products section when set.
+  const body = config.sectionOrder.flatMap<BodySection>((key) => {
+    const entry: BodySection[] = [{ key, Component: SECTION_COMPONENTS[key] }]
+    if (key === 'products' && config.competitor) {
+      entry.push({ key: 'alternative', Component: Competitor })
+    }
+    return entry
+  })
+  // Hero plus body plus contact, zero-padded to match the § NN / NN form.
+  const total = String(body.length + 2).padStart(2, '0')
+
   return (
     <>
       <div className="noise" aria-hidden />
       <SiteNav config={config} />
       <main>
         <Hero config={config} />
-        {config.sectionOrder.map((key, i) => {
-          const SectionComponent = SECTION_COMPONENTS[key]
-          // Hero is § 01 and contact is § 06, so ordered sections run 02–05.
-          const counter = `§ ${String(i + 2).padStart(2, '0')} / 06`
-          return <SectionComponent key={key} config={config} counter={counter} />
+        {body.map(({ key, Component }, i) => {
+          // Hero is § 01 and contact is last, so the body runs from § 02.
+          const counter = `§ ${String(i + 2).padStart(2, '0')} / ${total}`
+          return <Component key={key} config={config} counter={counter} />
         })}
-        <Contact config={config} counter="§ 06 / 06" />
+        <Contact config={config} counter={`§ ${total} / ${total}`} />
       </main>
       <SiteFooter config={config} />
     </>

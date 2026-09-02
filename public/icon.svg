@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
+  <!-- Derived from the Gentle Weapons wordmark: the rounded frame and
+       white-on-black treatment, reduced to a monogram that stays legible
+       at 16-32px where the two-line wordmark would not. -->
+  <rect width="64" height="64" fill="#000"/>
+  <rect x="5.5" y="5.5" width="53" height="53" rx="7" ry="7"
+        fill="none" stroke="#fff" stroke-width="3"/>
+  <text x="32" y="33.5"
+        font-family="Impact, 'Arial Black', 'Helvetica Neue', sans-serif"
+        font-size="30" font-weight="900" letter-spacing="-1"
+        fill="#fff" text-anchor="middle" dominant-baseline="central">GW</text>
+</svg>
