@@ -3,6 +3,7 @@ import Link from 'next/link'
 import { ClientLogo } from '@/components/client-logo'
 import { Ascii, DisplayHeading, Kicker, TerminalPanel } from '@/components/gw-ui'
 import { clients, getClient, PRODUCT_COLORS, PRODUCTS } from '@/lib/clients'
+import { prospectPhoto } from '@/lib/photos'
 import { initials, OPEN_ROLES, PROSPECTS, prospectPath, prospectsForClient } from '@/lib/prospects'
 
 const STAGES = [
@@ -31,6 +32,13 @@ const STAGES = [
     lines: ['A page per contact', 'plus the company site', 'at a distinct URL'],
   },
 ]
+
+/** Stable per-name angle so placeholder gradients vary without being random. */
+function gradientAngle(name: string): number {
+  let h = 0
+  for (const ch of name) h = (h * 31 + ch.charCodeAt(0)) % 360
+  return h
+}
 
 // Pipeline stages cycle the three product colors, as the site does.
 const STAGE_COLORS = [
@@ -94,6 +102,7 @@ function ProspectRow({
   slug,
   path,
   accent,
+  photo,
   linkedin,
   verified,
   highlight,
@@ -104,6 +113,8 @@ function ProspectRow({
   /** This person's own page. */
   path: string
   accent: string
+  /** Headshot under /public/people, when one has been supplied. */
+  photo?: string
   linkedin: string
   verified: boolean
   highlight?: boolean
@@ -120,23 +131,47 @@ function ProspectRow({
         background: highlight ? 'rgba(255,255,255,0.03)' : 'transparent',
       }}
     >
-      <span
-        aria-hidden
-        style={{
-          width: 42,
-          height: 42,
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          border: `1px solid ${accent}`,
-          color: accent,
-          fontSize: 14,
-          fontWeight: 700,
-          flexShrink: 0,
-        }}
-      >
-        {initials(name)}
-      </span>
+      {photo ? (
+        // eslint-disable-next-line @next/next/no-img-element
+        <img
+          src={photo}
+          alt={name}
+          width={42}
+          height={42}
+          style={{
+            width: 42,
+            height: 42,
+            objectFit: 'cover',
+            border: `1px solid ${accent}`,
+            // Keep headshots inside the site's monochrome system.
+            filter: 'grayscale(1) contrast(1.08)',
+            flexShrink: 0,
+            display: 'block',
+          }}
+        />
+      ) : (
+        // No headshot supplied: a gradient tile in the accent, angled per
+        // person so neighbouring placeholders do not look identical.
+        <span
+          aria-hidden
+          style={{
+            width: 42,
+            height: 42,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            border: `1px solid ${accent}`,
+            background: `linear-gradient(${gradientAngle(name)}deg, ${accent} 0%, ${accent}55 45%, #111 100%)`,
+            color: '#000',
+            fontSize: 13,
+            fontWeight: 700,
+            letterSpacing: '0.02em',
+            flexShrink: 0,
+          }}
+        >
+          {initials(name)}
+        </span>
+      )}
       <span style={{ minWidth: 0 }}>
         <a
           href={linkedin}
@@ -460,6 +495,7 @@ $ → ${prospectPath(exampleContact)}  [ READY ]`}</Ascii>
                     slug={client.slug}
                     path={prospectPath(p)}
                     accent={PRODUCT_COLORS[client.productOrder[0]]}
+                    photo={prospectPhoto(p)}
                     linkedin={p.linkedin}
                     verified={p.linkedinVerified}
                     highlight={p.name === EXAMPLE_CONTACT}

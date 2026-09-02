@@ -110,6 +110,14 @@ Links and logos on the index:
   `in ↗`). Otherwise a LinkedIn people search for name + company (`search ↗`). No profile
   slug is guessed — a wrong one would send a prospect's link to a stranger.
 - **Company names link to `website`.** Only on the index. Landing pages stay a closed funnel.
+- **Headshots are opt-in files, never fetched.** Drop a photo in `public/people/` named by the
+  contact's slug — `colby-adcock.jpg`, `collin-otis.jpg`, `brian-streem.jpg`,
+  `suresh-kumar.jpg`, `rylan-hamilton.jpg`, `scott-miller.jpg`, `austin-gray.jpg`,
+  `nathan-mintz.jpg`, `lee-thompson.jpg`, `mark-trefgarne.jpg`, `zane-mountcastle.jpg`,
+  `dan-chirita.jpg`, `martin-slosarik.jpg` (`.png` / `.webp` also work) — and the index shows
+  it next to their name at the next build, rendered in grayscale to match the site. No file, no
+  photo: the monogram stays. Company team pages and press kits are the right source; do not
+  scrape LinkedIn.
 - **Logos are the companies' own favicons**, loaded in the visitor's browser from a favicon
   service via `ClientLogo`, with the monogram as a fallback if the fetch fails. To use a
   proper logo file instead, drop it in `/public/logos/` and set `clientLogoSrc` — it takes
