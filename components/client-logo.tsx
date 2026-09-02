@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 
 import type { LogoMark } from '@/lib/clients'
 
@@ -35,7 +35,17 @@ export function ClientLogo({
   title?: string
 }) {
   const [remoteFailed, setRemoteFailed] = useState(false)
+  const remoteRef = useRef<HTMLImageElement>(null)
   const label = title ?? `${name} logo`
+
+  // If the favicon failed to load before React hydrated, the error event has
+  // already fired and onError will never see it. Check the element's state on
+  // mount so a pre-hydration failure still falls back to the monogram instead
+  // of leaving a broken-image glyph in the lockup.
+  useEffect(() => {
+    const el = remoteRef.current
+    if (el && el.complete && el.naturalWidth === 0) setRemoteFailed(true)
+  }, [])
 
   if (src) {
     // eslint-disable-next-line @next/next/no-img-element
@@ -54,6 +64,7 @@ export function ClientLogo({
     return (
       // eslint-disable-next-line @next/next/no-img-element
       <img
+        ref={remoteRef}
         src={`https://www.google.com/s2/favicons?domain=${domain}&sz=128`}
         alt={label}
         width={size}

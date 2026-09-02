@@ -248,6 +248,15 @@ export function PlatformPage({ config, product }: { config: ClientConfig; produc
               {product.body}
             </p>
 
+            <div style={{ borderLeft: `3px solid ${config.accent}`, paddingLeft: 16 }}>
+              <Kicker style={{ color: config.accent }}>
+                &gt; FOR {config.clientName.toUpperCase()}
+              </Kicker>
+              <p style={{ marginTop: 8, color: 'var(--gw-bone)', fontSize: 14.5, lineHeight: 1.65 }}>
+                {config.productNotes[product.key]}
+              </p>
+            </div>
+
             <div style={{ borderTop: '1px solid var(--gw-gray-1)', paddingTop: 18 }}>
               <Kicker style={{ marginBottom: 12 }}>&gt; CAPABILITY_SET</Kicker>
               <OkList points={product.capabilities} accent={config.accent} />

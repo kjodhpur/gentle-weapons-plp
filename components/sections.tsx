@@ -82,9 +82,8 @@ export function Hero({ config }: { config: ClientConfig }) {
             >
               {hero.lede}
             </p>
-            <p style={{ marginTop: 16, fontSize: 14, color: 'var(--gw-gray-3)', lineHeight: 1.6 }}>
-              Edge intelligence and edge software deployment for engineering leaders who need
-              reliability, security, and deployment at scale on the path to procurement.
+            <p style={{ marginTop: 16, fontSize: 14.5, color: 'var(--gw-gray-3)', lineHeight: 1.65 }}>
+              {config.hero.context}
             </p>
           </div>
         </div>
@@ -323,6 +322,29 @@ export function Products({ config, counter }: { config: ClientConfig; counter: s
                   {product.body}
                 </p>
 
+                {/* What this product means for this prospect specifically. */}
+                <div
+                  style={{
+                    borderLeft: `3px solid ${config.accent}`,
+                    paddingLeft: 16,
+                    maxWidth: 560,
+                  }}
+                >
+                  <Kicker style={{ color: config.accent }}>
+                    &gt; FOR {config.clientName.toUpperCase()}
+                  </Kicker>
+                  <p
+                    style={{
+                      marginTop: 8,
+                      color: 'var(--gw-bone)',
+                      fontSize: 14.5,
+                      lineHeight: 1.65,
+                    }}
+                  >
+                    {config.productNotes[product.key]}
+                  </p>
+                </div>
+
                 <div
                   style={{
                     borderTop: '1px solid var(--gw-gray-1)',
@@ -529,7 +551,12 @@ const DEPLOYMENT_SPECS = [
 export function Deployment({ config, counter }: { config: ClientConfig; counter: string }) {
   return (
     <Section id="deployment">
-      <SectionHead kicker="// DEPLOYMENT_VIEW" title="How it fields." counter={counter} />
+      <SectionHead
+        kicker="// DEPLOYMENT_VIEW"
+        title="How it fields."
+        lede={config.deploymentNote}
+        counter={counter}
+      />
 
       <div
         style={{
@@ -701,7 +728,7 @@ export function Contact({ config, counter }: { config: ClientConfig; counter: st
       <SectionHead
         kicker="// OPEN_CHANNEL"
         title={`Request a briefing for ${config.clientName}.`}
-        lede="Send a short note. We reply to qualified inquiries within 24 hours with a scheduling link to meet the founder."
+        lede={`Why we think this fits: ${config.fit} Send a short note — qualified inquiries get a scheduling link to meet the founder within 24 hours.`}
         counter={counter}
       />
 

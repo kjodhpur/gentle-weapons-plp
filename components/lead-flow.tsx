@@ -43,7 +43,7 @@ function Stage({ stage, accent }: { stage: (typeof STAGES)[number]; accent: stri
         <span
           style={{
             fontFamily: 'var(--font-display)',
-            fontSize: 26,
+            fontSize: 30,
             lineHeight: 1,
             color: accent,
           }}
@@ -55,7 +55,7 @@ function Stage({ stage, accent }: { stage: (typeof STAGES)[number]; accent: stri
       <div
         style={{
           marginTop: 12,
-          fontSize: 15,
+          fontSize: 17,
           fontWeight: 700,
           textTransform: 'uppercase',
           letterSpacing: '0.02em',
@@ -65,7 +65,7 @@ function Stage({ stage, accent }: { stage: (typeof STAGES)[number]; accent: stri
       </div>
       <div style={{ marginTop: 10, display: 'flex', flexDirection: 'column', gap: 5 }}>
         {stage.lines.map((line) => (
-          <div key={line} style={{ fontSize: 12.5, color: 'var(--gw-gray-3)', lineHeight: 1.5 }}>
+          <div key={line} style={{ fontSize: 14, color: 'var(--gw-gray-3)', lineHeight: 1.55 }}>
             <span style={{ color: 'var(--gw-gray-2)', marginRight: 8 }}>▸</span>
             {line}
           </div>
@@ -104,7 +104,7 @@ function ProspectRow({
         gridTemplateColumns: 'auto minmax(0,1fr) auto',
         gap: 14,
         alignItems: 'center',
-        padding: '14px 16px',
+        padding: '16px 20px',
         borderTop: '1px solid var(--gw-gray-1)',
         background: highlight ? 'rgba(255,255,255,0.03)' : 'transparent',
       }}
@@ -112,14 +112,14 @@ function ProspectRow({
       <span
         aria-hidden
         style={{
-          width: 34,
-          height: 34,
+          width: 42,
+          height: 42,
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
           border: `1px solid ${accent}`,
           color: accent,
-          fontSize: 12,
+          fontSize: 14,
           fontWeight: 700,
           flexShrink: 0,
         }}
@@ -135,8 +135,8 @@ function ProspectRow({
           style={{
             display: 'inline-flex',
             alignItems: 'baseline',
-            gap: 8,
-            fontSize: 14,
+            gap: 10,
+            fontSize: 16.5,
             fontWeight: 700,
             letterSpacing: '0.02em',
             textDecoration: 'underline',
@@ -147,7 +147,7 @@ function ProspectRow({
           {name}
           <span
             style={{
-              fontSize: 9.5,
+              fontSize: 10.5,
               fontWeight: 400,
               letterSpacing: '0.18em',
               color: verified ? accent : 'var(--gw-gray-2)',
@@ -160,11 +160,11 @@ function ProspectRow({
         <span
           style={{
             display: 'block',
-            marginTop: 4,
-            fontSize: 10.5,
-            color: 'var(--gw-gray-2)',
+            marginTop: 5,
+            fontSize: 12.5,
+            color: 'var(--gw-gray-3)',
             textTransform: 'uppercase',
-            letterSpacing: '0.12em',
+            letterSpacing: '0.1em',
             lineHeight: 1.45,
           }}
         >
@@ -175,12 +175,12 @@ function ProspectRow({
         href={`/${slug}`}
         className="hover-invert"
         style={{
-          fontSize: 11.5,
-          letterSpacing: '0.14em',
+          fontSize: 13,
+          letterSpacing: '0.12em',
           color: accent,
           whiteSpace: 'nowrap',
           flexShrink: 0,
-          padding: '6px 8px',
+          padding: '8px 10px',
           border: '1px solid var(--gw-gray-1)',
         }}
       >
@@ -243,9 +243,9 @@ export function LeadFlow() {
             style={{
               marginTop: 20,
               color: 'var(--gw-gray-3)',
-              fontSize: 14.5,
+              fontSize: 16.5,
               lineHeight: 1.7,
-              maxWidth: 660,
+              maxWidth: 720,
             }}
           >
             A contact&apos;s employer decides which page they receive. Match the company, and the
@@ -293,7 +293,7 @@ export function LeadFlow() {
           {example && exampleContact && (
             <div style={{ marginTop: 26 }}>
               <TerminalPanel title="plp_resolve.sh">
-                <Ascii color="var(--gw-bone)">{`$ plp resolve --contact "${exampleContact.name}" --company "${example.clientName}"
+                <Ascii color="var(--gw-bone)" size={13.5}>{`$ plp resolve --contact "${exampleContact.name}" --company "${example.clientName}"
 
   [ 01 ] SOURCE   name: ${exampleContact.name} · title: ${exampleContact.title}
   [ 02 ] MATCH    "${example.clientName}"  ──▶  ${example.slug}
@@ -307,7 +307,7 @@ $ → /${example.slug}  [ READY ]`}</Ascii>
               <p
                 style={{
                   marginTop: 14,
-                  fontSize: 12,
+                  fontSize: 13.5,
                   color: 'var(--gw-gray-2)',
                   lineHeight: 1.6,
                   maxWidth: 720,
@@ -343,9 +343,9 @@ $ → /${example.slug}  [ READY ]`}</Ascii>
                 style={{
                   marginTop: 16,
                   color: 'var(--gw-gray-3)',
-                  fontSize: 14,
-                  lineHeight: 1.65,
-                  maxWidth: 700,
+                  fontSize: 16,
+                  lineHeight: 1.7,
+                  maxWidth: 760,
                 }}
               >
                 Publicly named leadership at {clients.length} Series A defense-autonomy companies,
@@ -361,10 +361,10 @@ $ → /${example.slug}  [ READY ]`}</Ascii>
             </span>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 md:gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
             {clients.map((client) => (
               <div key={client.slug} style={{ border: '1px solid var(--gw-gray-1)', minWidth: 0 }}>
-                <div style={{ padding: '16px 16px 14px' }}>
+                <div style={{ padding: '20px 20px 18px' }}>
                   <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
                     <ClientLogo
                       name={client.clientName}
@@ -372,7 +372,7 @@ $ → /${example.slug}  [ READY ]`}</Ascii>
                       src={client.clientLogoSrc}
                       website={client.website}
                       color={client.accent}
-                      size={26}
+                      size={32}
                     />
                     <a
                       href={client.website}
@@ -380,7 +380,7 @@ $ → /${example.slug}  [ READY ]`}</Ascii>
                       rel="noopener noreferrer"
                       title={client.website}
                       style={{
-                        fontSize: 14,
+                        fontSize: 18,
                         fontWeight: 700,
                         textTransform: 'uppercase',
                         letterSpacing: '0.02em',
@@ -408,9 +408,9 @@ $ → /${example.slug}  [ READY ]`}</Ascii>
                   </div>
                   <div
                     style={{
-                      marginTop: 8,
-                      fontSize: 10,
-                      letterSpacing: '0.2em',
+                      marginTop: 10,
+                      fontSize: 12,
+                      letterSpacing: '0.18em',
                       color: client.accent,
                       textTransform: 'uppercase',
                     }}
@@ -419,10 +419,10 @@ $ → /${example.slug}  [ READY ]`}</Ascii>
                   </div>
                   <div
                     style={{
-                      marginTop: 4,
-                      fontSize: 10,
-                      letterSpacing: '0.2em',
-                      color: 'var(--gw-gray-2)',
+                      marginTop: 5,
+                      fontSize: 11.5,
+                      letterSpacing: '0.16em',
+                      color: 'var(--gw-gray-3)',
                       textTransform: 'uppercase',
                     }}
                   >
@@ -431,10 +431,10 @@ $ → /${example.slug}  [ READY ]`}</Ascii>
                   </div>
                   <p
                     style={{
-                      marginTop: 10,
-                      fontSize: 12.5,
+                      marginTop: 12,
+                      fontSize: 15,
                       color: 'var(--gw-gray-3)',
-                      lineHeight: 1.55,
+                      lineHeight: 1.6,
                     }}
                   >
                     {client.fit}
@@ -456,10 +456,10 @@ $ → /${example.slug}  [ READY ]`}</Ascii>
                   <div
                     style={{
                       borderTop: '1px solid var(--gw-gray-1)',
-                      padding: '12px 16px',
-                      fontSize: 10.5,
-                      color: 'var(--gw-gray-2)',
-                      letterSpacing: '0.12em',
+                      padding: '14px 20px',
+                      fontSize: 12.5,
+                      color: 'var(--gw-gray-3)',
+                      letterSpacing: '0.1em',
                       textTransform: 'uppercase',
                       lineHeight: 1.6,
                     }}
@@ -472,7 +472,7 @@ $ → /${example.slug}  [ READY ]`}</Ascii>
             ))}
           </div>
 
-          <p style={{ marginTop: 26, fontSize: 11.5, color: 'var(--gw-gray-2)', lineHeight: 1.7 }}>
+          <p style={{ marginTop: 26, fontSize: 13.5, color: 'var(--gw-gray-2)', lineHeight: 1.7 }}>
             Adding a company means one entry in <code>lib/clients.ts</code>; its 17 pages build at{' '}
             <code>/&lt;slug&gt;</code> automatically. Contacts and their sources live in{' '}
             <code>lib/prospects.ts</code>.

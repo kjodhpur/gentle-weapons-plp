@@ -256,12 +256,18 @@ export type ClientConfig = {
    * labelled "OBSERVED AT <COMPANY>". Three reads best.
    */
   painPoints?: { title: string; body: string }[]
+  /** One line per product on what it means for this company, on each product card. */
+  productNotes: Record<ProductKey, string>
+  /** Maps the ORIGIN → DISTRIBUTION → EDGE schematic onto this company's operation. */
+  deploymentNote: string
 
   hero: {
     rev: string
     headlineTop: string
     headlineBottom: string
     lede: string
+    /** Paragraph under the lede, written for this company's situation. */
+    context: string
     bullets: string[]
     /** Highlighted closing fragment on the last bullet. */
     flag: string
@@ -301,6 +307,15 @@ export const clients: ClientConfig[] = [
     accent: ACCENTS.phosphor,
     round: 'Series A · $100M · Apr 2026',
     website: 'https://scoutco.ai',
+    productNotes: {
+      gwos: 'Fury runs on whatever chassis a partner brings. GWOS gives every one of them the same pinned CUDA and TensorRT stack, so an eval result on the G01 means something on the next vehicle.',
+      poolnet:
+        'Fury is built for degraded comms. Poolnet is the link it uses when there is no link home — the rollout, the telemetry, and operator reach all ride the same mesh.',
+      poolboy:
+        'Every new Fury checkpoint is a fleet rollout. Poolboy makes it canary → wave → fleet: signed, per-node acknowledged, and reversible on telemetry.',
+    },
+    deploymentNote:
+      'For Scout AI: ORIGIN is the model team shipping a checkpoint. DISTRIBUTION is Poolboy over Poolnet to a mixed fleet. EDGE is Fury running on GWOS on each vehicle.',
     fit: 'Fury is one model shipped to mixed UGV and UAS fleets, at the edge, in degraded comms — the exact rollout problem Poolboy and Poolnet exist for.',
     painPoints: [
       {
@@ -321,6 +336,8 @@ export const clients: ClientConfig[] = [
       headlineTop: 'The model is trained.',
       headlineBottom: 'Now ship it to the fleet.',
       lede: 'Signed model delivery for Fury across mixed ground and air fleets — in degraded comms, with a rollback that holds.',
+      context:
+        'Fury is moving from demonstrations to fleets: mixed UGV and UAS, Army program work, and a $100M Series A to scale it. The platform layer beneath the model is where that scale either holds or leaks. This page is about that layer.',
       bullets: [
         'Poolboy ships weights and binaries to every platform Fury runs on, with per-node acknowledgement.',
         'GWOS pins CUDA and TensorRT so the checkpoint that passed eval is the one that runs.',
@@ -349,6 +366,15 @@ export const clients: ClientConfig[] = [
     accent: ACCENTS.amber,
     round: 'Series A · $10M · Oct 2025',
     website: 'https://www.getvermeer.com',
+    productNotes: {
+      gwos: 'The NVIDIA box in each airframe becomes an immutable, attested image with A/B rollback — the VPS pipeline that was qualified is the one that flies.',
+      poolnet:
+        'Where aircraft return to a forward site with no backhaul, Poolnet gives ground crews a secure path to push maps and pull logs without a horizon link.',
+      poolboy:
+        'Terrain databases and matching models are large. Poolboy delivers them as signed, delta, resumable rollouts sized for the link that is actually available.',
+    },
+    deploymentNote:
+      'For Vermeer: ORIGIN is the map and model build. DISTRIBUTION is delta delivery over whatever link the forward site has. EDGE is the VPS processor in the aircraft, attested at boot.',
     fit: 'VPS already runs on an NVIDIA edge processor inside every equipped airframe, under electronic attack in Ukraine. That box needs a signed, immutable, updatable image — which is GWOS.',
     painPoints: [
       {
@@ -369,6 +395,8 @@ export const clients: ClientConfig[] = [
       headlineTop: 'Passive in the air.',
       headlineBottom: 'Attested on the ground.',
       lede: 'A signed, immutable image for the NVIDIA edge processor inside every VPS-equipped airframe.',
+      context:
+        'VPS is fielded — under electronic attack in Ukraine and alongside Lockheed Martin and Northrop Grumman. Every equipped airframe carries an NVIDIA edge processor and a terrain database. That fleet of boxes is what this page is about.',
       bullets: [
         'GWOS locks the JetPack stack so a map-matching pipeline behaves identically across the fleet.',
         'Signed delta OTA for terrain-map and model updates over low-bandwidth links.',
@@ -397,6 +425,15 @@ export const clients: ClientConfig[] = [
     accent: ACCENTS.cyan,
     round: 'Series A · $50M · Aug 2025',
     website: 'https://www.blw.ai',
+    productNotes: {
+      gwos: "A ship's compute gets an immutable base with A/B partitions: an update that fails at sea reverts on its own, with no one aboard and no recovery sortie.",
+      poolnet:
+        'Satcom degrades. Poolnet keeps operators reachable through it — policy-driven egress, encrypted, and tolerant of the link dropping for hours.',
+      poolboy:
+        'As the fleet grows past the first hull, Poolboy stages rollouts in waves with human go/no-go gates, so a bad update never reaches every vessel at once.',
+    },
+    deploymentNote:
+      'For Blue Water Autonomy: ORIGIN is the operations center ashore. DISTRIBUTION is Poolboy over degraded satcom. EDGE is a hull hundreds of miles out with nobody aboard.',
     fit: 'A vessel operating on the open ocean for months is DDIL by definition, with no one aboard to recover a bad update. Signed OTA and no-brick rollback are the whole problem.',
     painPoints: [
       {
@@ -417,6 +454,8 @@ export const clients: ClientConfig[] = [
       headlineTop: 'Months at sea.',
       headlineBottom: 'No one aboard to reboot it.',
       lede: 'Signed OTA and last-known-good rollback for a vessel that cannot be recovered by hand.',
+      context:
+        'The first full-sized autonomous ship launches in 2026, with the Navy already contracting for deep-ocean survey work. A vessel on station for months is the hardest OTA target there is. This page is written for that vessel.',
       bullets: [
         'A/B images with atomic rollback — an update that fails at sea reverts on its own.',
         'Poolnet keeps operators reachable over degraded satcom, egress optional.',
@@ -445,6 +484,15 @@ export const clients: ClientConfig[] = [
     accent: ACCENTS.redact,
     round: 'Series A · $31M · May 2025',
     website: 'https://www.cx2.com',
+    productNotes: {
+      gwos: 'Attritable units are re-provisioned constantly. A signed, immutable GWOS image with per-node identity means a replacement unit is trusted and current the moment it boots.',
+      poolnet:
+        "Poolnet is a mesh built to survive the same jamming CX2's systems operate in — self-forming, egress optional, with short-lived certs that fit a fleet that churns.",
+      poolboy:
+        'EW models change with the signals they face. Poolboy ships them to fielded units in days, signed and per-node acknowledged, with rollback when a model regresses.',
+    },
+    deploymentNote:
+      'For CX2: ORIGIN is the signals and ML team. DISTRIBUTION is Poolboy across a self-healing Poolnet mesh in contested spectrum. EDGE is an attritable node that may be replaced next week.',
     fit: 'Attritable, ML-powered EW systems at the tactical edge live inside the fight for the spectrum. Their update path and their comms have to survive the same jamming they are built to win.',
     painPoints: [
       {
@@ -465,6 +513,8 @@ export const clients: ClientConfig[] = [
       headlineTop: 'The spectrum is contested.',
       headlineBottom: 'So is your update path.',
       lede: 'Encrypted mesh and signed delivery for attritable EW systems operating inside a contested spectrum.',
+      context:
+        'CX2 builds attritable, ML-powered electronic warfare for the tactical edge — systems meant to be numerous, replaceable, and operating inside contested spectrum. The update and comms path for that fleet is what this page addresses.',
       bullets: [
         'Poolnet forms and heals without backhaul — quantum-safe links, short-lived certs.',
         'Signed, per-node-acknowledged rollouts for ML models on attritable hardware.',
@@ -493,6 +543,15 @@ export const clients: ClientConfig[] = [
     accent: ACCENTS.bone,
     round: 'Series A · $45M · May 2026',
     website: 'https://picogrid.com',
+    productNotes: {
+      gwos: 'Each fielded Picogrid node gets the same immutable, attested base image, so 100+ integrations do not become 100+ configuration drifts.',
+      poolnet:
+        "For sites with no clean backhaul, Poolnet gives nodes a secure, self-forming path to each other and to operators without waiting on the customer's network.",
+      poolboy:
+        'Rollouts across programs and countries need region targeting and resumable delivery. Poolboy gives every node a signed, acknowledged, reversible update path.',
+    },
+    deploymentNote:
+      'For Picogrid: ORIGIN is the platform team. DISTRIBUTION is Poolboy targeting by program and region. EDGE is a Picogrid node on a customer site that may not have been touched in months.',
     fit: 'Hardware-enabled software connecting 100+ military systems means edge nodes fielded at scale. Every one of them needs a hardened base and a fleet-wide, signed update path.',
     painPoints: [
       {
@@ -513,6 +572,8 @@ export const clients: ClientConfig[] = [
       headlineTop: 'A hundred systems integrated.',
       headlineBottom: 'One hardened base beneath.',
       lede: 'A hardened, attestable base image and fleet-wide signed OTA for the edge hardware that carries an integration layer into the field.',
+      context:
+        "Picogrid's integration layer already connects 100+ military systems across Pentagon, NATO, and allied programs, and the $45M Series A is about scaling deployments. Every deployment puts more edge hardware in the field. This page is about that hardware.",
       bullets: [
         'GWOS gives every fielded node an immutable, attested rootfs with A/B rollback.',
         'Poolboy rolls out to the node fleet in waves — canary first, per-node ack, LKG rollback.',

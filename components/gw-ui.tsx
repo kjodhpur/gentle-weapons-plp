@@ -247,13 +247,21 @@ export function TerminalPanel({
 }
 
 /** Preformatted ASCII art / shell transcript. */
-export function Ascii({ children, color }: { children: string; color?: string }) {
+export function Ascii({
+  children,
+  color,
+  size = 11.5,
+}: {
+  children: string
+  color?: string
+  size?: number
+}) {
   return (
     <pre
       style={{
         margin: 0,
         fontFamily: 'var(--font-mono)',
-        fontSize: 11.5,
+        fontSize: size,
         lineHeight: 1.5,
         color: color ?? 'var(--gw-gray-3)',
         whiteSpace: 'pre',
