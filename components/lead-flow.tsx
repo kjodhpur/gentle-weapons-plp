@@ -283,19 +283,6 @@ export function LeadFlow() {
             <br />
             A tailored site each out.
           </DisplayHeading>
-          <p
-            style={{
-              marginTop: 20,
-              color: 'var(--gw-gray-3)',
-              fontSize: 16.5,
-              lineHeight: 1.7,
-              maxWidth: 720,
-            }}
-          >
-            A contact&apos;s employer decides which page they receive. Match the company, and the
-            accent, lead product, section order, competitor comparison, and CTA all follow from one
-            config entry — no page is authored by hand.
-          </p>
         </section>
 
         {/* Pipeline */}
