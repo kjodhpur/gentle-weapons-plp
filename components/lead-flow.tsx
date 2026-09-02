@@ -1,5 +1,6 @@
 import Link from 'next/link'
 
+import { ClientLogo } from '@/components/client-logo'
 import { Ascii, DisplayHeading, Kicker, TerminalPanel } from '@/components/gw-ui'
 import { clients, getClient, PRODUCTS } from '@/lib/clients'
 import { initials, prospectsForClient } from '@/lib/prospects'
@@ -322,9 +323,11 @@ $ → /${example.slug}  [ READY ]`}</Ascii>
               <div key={client.slug} style={{ border: '1px solid var(--gw-gray-1)', minWidth: 0 }}>
                 <div style={{ padding: '16px 16px 14px' }}>
                   <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-                    <span
-                      aria-hidden
-                      style={{ width: 10, height: 10, background: client.accent, flexShrink: 0 }}
+                    <ClientLogo
+                      mark={client.logoMark}
+                      color={client.accent}
+                      size={26}
+                      title={`${client.clientName} logo`}
                     />
                     <span
                       style={{

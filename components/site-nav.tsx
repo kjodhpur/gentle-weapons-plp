@@ -1,5 +1,6 @@
 import Link from 'next/link'
 
+import { ClientLogo } from '@/components/client-logo'
 import type { ClientConfig, SectionKey } from '@/lib/clients'
 
 /**
@@ -56,6 +57,12 @@ export function SiteNav({ config }: { config: ClientConfig }) {
 
           {/* Co-brand divider + prospect name */}
           <span style={{ color: 'var(--gw-gray-1)', flexShrink: 0 }}>×</span>
+          <ClientLogo
+            mark={config.logoMark}
+            color={config.accent}
+            size={28}
+            title={`${config.clientName} logo`}
+          />
           <span style={{ minWidth: 0 }}>
             <span
               style={{

@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import type { ReactNode } from 'react'
 
+import { ClientLogo } from '@/components/client-logo'
 import { Ascii, BracketLink, DisplayHeading, Kicker, Section, TerminalPanel } from '@/components/gw-ui'
 import { SiteFooter } from '@/components/sections'
 import type { Alternative, ClientConfig, Product } from '@/lib/clients'
@@ -47,6 +48,12 @@ function SubNav({ config }: { config: ClientConfig }) {
             />
           </Link>
           <span style={{ color: 'var(--gw-gray-1)', flexShrink: 0 }}>×</span>
+          <ClientLogo
+            mark={config.logoMark}
+            color={config.accent}
+            size={26}
+            title={`${config.clientName} logo`}
+          />
           {/* The mark goes to the index, so the client name is the way back
               to this prospect's own landing page. */}
           <Link

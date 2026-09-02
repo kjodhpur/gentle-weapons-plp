@@ -7,6 +7,9 @@
  * section order, which product leads, and the CTA.
  */
 
+/** Which hypothetical mark a sample company uses. See components/client-logo.tsx. */
+export type LogoMark = 'delta' | 'hull' | 'meridian'
+
 export type ProductKey = 'gwos' | 'poolnet' | 'poolboy'
 export type ProblemKey = 'os-sidequests' | 'links-degrade' | 'model-delivery'
 export type SectionKey = 'doctrine' | 'products' | 'deployment' | 'company'
@@ -227,6 +230,8 @@ export type ClientConfig = {
   accent: string
   /** Optional client logo under /public; falls back to a text lockup. */
   clientLogoSrc?: string
+  /** Hypothetical mark used until a real client logo is supplied. */
+  logoMark: LogoMark
 
   hero: {
     rev: string
@@ -261,6 +266,7 @@ export const clients: ClientConfig[] = [
     slug: 'vantage-aero',
     clientName: 'Vantage Aeronautics',
     clientDescriptor: 'UAS AUTONOMY',
+    logoMark: 'delta',
     accent: ACCENTS.phosphor,
     hero: {
       rev: 'REV 2026.05',
@@ -292,6 +298,7 @@ export const clients: ClientConfig[] = [
     slug: 'ironline-defense',
     clientName: 'Ironline Defense Systems',
     clientDescriptor: 'GROUND VEHICLE PRIME',
+    logoMark: 'hull',
     accent: ACCENTS.amber,
     hero: {
       rev: 'REV 2026.05',
@@ -323,6 +330,7 @@ export const clients: ClientConfig[] = [
     slug: 'meridian-isr',
     clientName: 'Meridian ISR',
     clientDescriptor: 'ISR INTEGRATOR',
+    logoMark: 'meridian',
     accent: ACCENTS.cyan,
     hero: {
       rev: 'REV 2026.05',
