@@ -27,6 +27,25 @@ Built with [Next.js](https://nextjs.org), bootstrapped with [v0](https://v0.app)
   stacks, and the `.noise` / `.scanline` / `.grid-bg` / `.hair` / `.marquee-track` /
   `.hover-invert` effects.
 
+### Routes
+
+Every prospect gets a full site under their own slug, not just one page:
+
+```
+/<client>                              landing page
+/<client>/platform/<product>           gwos · poolnet · poolboy
+/<client>/<guide>                      secure-boot · immutable-linux · signed-ota
+                                       deploy-software-to-jetson · mesh-network
+                                       fleet-management
+/<client>/alternatives/<alternative>   yocto · ubuntu-core · kairos · mender
+                                       balena · foundries-io · meshmerize
+```
+
+That is 17 pages per client, all statically generated. Guide and alternative
+content lives in `lib/subpages.ts` and `ALTERNATIVES` respectively; the
+templates are in `components/subpage.tsx`. Each route sets
+`dynamicParams = false`, so an unknown slug 404s rather than rendering empty.
+
 ### Adding a prospective client
 
 Append an entry to `clients` in `lib/clients.ts`. Nothing else needs to change — the page builds

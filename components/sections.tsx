@@ -11,6 +11,7 @@ import {
 } from '@/components/gw-ui'
 import type { ClientConfig } from '@/lib/clients'
 import { ALTERNATIVES, PRODUCTS, PROBLEMS } from '@/lib/clients'
+import { guidesForProduct } from '@/lib/subpages'
 
 export function Hero({ config }: { config: ClientConfig }) {
   const { hero } = config
@@ -335,6 +336,30 @@ export function Products({ config, counter }: { config: ClientConfig; counter: s
                   </ul>
                 </div>
 
+                {/* Cross-links into this client's own sub-pages — never out
+                    to the main site. */}
+                <div
+                  style={{
+                    borderTop: '1px solid var(--gw-gray-1)',
+                    paddingTop: 18,
+                    display: 'flex',
+                    flexDirection: 'column',
+                    gap: 10,
+                  }}
+                >
+                  <Kicker>&gt; GUIDES</Kicker>
+                  <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
+                    <BracketLink href={`/${config.slug}/platform/${product.key}`}>
+                      platform
+                    </BracketLink>
+                    {guidesForProduct(product.key).map((guide) => (
+                      <BracketLink key={guide.key} href={`/${config.slug}/${guide.key}`}>
+                        {guide.title.toLowerCase()}
+                      </BracketLink>
+                    ))}
+                  </div>
+                </div>
+
                 <div
                   style={{
                     display: 'flex',
@@ -419,6 +444,9 @@ export function Competitor({ config, counter }: { config: ClientConfig; counter:
               or endorsements.
             </p>
             <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap' }}>
+              <BracketLink href={`/${config.slug}/alternatives/${alt.key}`}>
+                full comparison
+              </BracketLink>
               <BracketLink href="#contact">{config.ctaLabel}</BracketLink>
             </div>
           </div>
