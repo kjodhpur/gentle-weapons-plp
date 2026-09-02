@@ -47,6 +47,18 @@ at `/<slug>` on the next deploy.
 }
 ```
 
+## These pages do not link to gentleweapons.com
+
+Landing pages are self-contained: every action funnels to `#contact`. The nav
+logo is deliberately not a link, product cards carry no "guides" links, and the
+competitor block links to the CTA rather than to the full comparison page. Keep
+it that way when adding sections — the only outbound references are the
+`mailto:` addresses, which are the CTA itself.
+
+One exception, and it is a resource request rather than a link a visitor can
+click: `app/globals.css` loads the display face from
+`https://gentleweapons.com/fonts/unicode.compacta.ttf`. See Notes below.
+
 ## Notes
 
 - The display face (`AC Compacta`) is loaded by `@font-face` from

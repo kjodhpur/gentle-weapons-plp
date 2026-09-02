@@ -20,7 +20,6 @@ export type Product = {
   headline: string
   body: string
   capabilities: string[]
-  guides: { label: string; href: string }[]
 }
 
 export const PRODUCTS: Record<ProductKey, Product> = {
@@ -38,16 +37,6 @@ export const PRODUCTS: Record<ProductKey, Product> = {
       'TPM-backed boot, secure-element device identity, SBOM per image',
       'FIPS 140-3 cryptographic track, CMMC L2 alignment roadmap',
     ],
-    guides: [
-      { label: 'platform', href: 'https://gentleweapons.com/platform/gwos' },
-      { label: 'secure boot', href: 'https://gentleweapons.com/secure-boot' },
-      { label: 'immutable linux', href: 'https://gentleweapons.com/immutable-linux' },
-      { label: 'signed ota', href: 'https://gentleweapons.com/signed-ota' },
-      {
-        label: 'deploy software to jetson',
-        href: 'https://gentleweapons.com/deploy-software-to-jetson',
-      },
-    ],
   },
   poolnet: {
     key: 'poolnet',
@@ -61,10 +50,6 @@ export const PRODUCTS: Record<ProductKey, Product> = {
       'Partition-tolerant · continues operating without backhaul',
       'Policy-driven egress · optionally tethered to cloud',
       'Operator-in-the-loop ACLs · audit trail · time-boxed access',
-    ],
-    guides: [
-      { label: 'platform', href: 'https://gentleweapons.com/platform/poolnet' },
-      { label: 'mesh network', href: 'https://gentleweapons.com/mesh-network' },
     ],
   },
   poolboy: {
@@ -80,11 +65,6 @@ export const PRODUCTS: Record<ProductKey, Product> = {
       'Atomic rollback to last-known-good on telemetry breach',
       'Bandwidth-aware · resumable · works over intermittent links',
       'Human-authorized go/no-go gates · multi-operator control',
-    ],
-    guides: [
-      { label: 'platform', href: 'https://gentleweapons.com/platform/poolboy' },
-      { label: 'fleet management', href: 'https://gentleweapons.com/fleet-management' },
-      { label: 'signed ota', href: 'https://gentleweapons.com/signed-ota' },
     ],
   },
 }
@@ -136,8 +116,6 @@ export type Alternative = {
   counter: string
   /** The switch case, as [ OK ] rows. */
   points: string[]
-  /** Canonical page on the production site. */
-  href: string
 }
 
 /**
@@ -157,7 +135,6 @@ export const ALTERNATIVES: Record<AlternativeKey, Alternative> = {
       'SBOM generation aligned to procurement review',
       'Optional integration with Poolboy fleet rollout',
     ],
-    href: 'https://gentleweapons.com/alternatives/yocto',
   },
   'ubuntu-core': {
     key: 'ubuntu-core',
@@ -170,7 +147,6 @@ export const ALTERNATIVES: Record<AlternativeKey, Alternative> = {
       'SBOM and attestation metadata per production image',
       'Interlocks with Poolboy payload rollout and Poolnet mesh',
     ],
-    href: 'https://gentleweapons.com/alternatives/ubuntu-core',
   },
   kairos: {
     key: 'kairos',
@@ -183,7 +159,6 @@ export const ALTERNATIVES: Record<AlternativeKey, Alternative> = {
       'Attested boot and SBOM for procurement review',
       'Stack integration for mesh and payload rollout',
     ],
-    href: 'https://gentleweapons.com/alternatives/kairos',
   },
   mender: {
     key: 'mender',
@@ -196,7 +171,6 @@ export const ALTERNATIVES: Record<AlternativeKey, Alternative> = {
       'Poolnet delivers both when backhaul is unavailable',
       'Human-authorized rollout gates for operational safety',
     ],
-    href: 'https://gentleweapons.com/alternatives/mender',
   },
   balena: {
     key: 'balena',
@@ -209,7 +183,6 @@ export const ALTERNATIVES: Record<AlternativeKey, Alternative> = {
       'Poolnet delivery when cloud fleet backhaul is degraded',
       'Human-authorized rollout waves for operational safety',
     ],
-    href: 'https://gentleweapons.com/alternatives/balena',
   },
   'foundries-io': {
     key: 'foundries-io',
@@ -222,7 +195,6 @@ export const ALTERNATIVES: Record<AlternativeKey, Alternative> = {
       'Human-authorized go/no-go gates for field operations',
       'Rollback to last-known-good on telemetry breach',
     ],
-    href: 'https://gentleweapons.com/alternatives/foundries-io',
   },
   meshmerize: {
     key: 'meshmerize',
@@ -235,7 +207,6 @@ export const ALTERNATIVES: Record<AlternativeKey, Alternative> = {
       'Operator ACLs and time-boxed access',
       'Shared stack with signed OTA and OS attestation',
     ],
-    href: 'https://gentleweapons.com/alternatives/meshmerize',
   },
 }
 

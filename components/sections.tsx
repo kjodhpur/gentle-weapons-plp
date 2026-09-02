@@ -337,25 +337,6 @@ export function Products({ config, counter }: { config: ClientConfig; counter: s
 
                 <div
                   style={{
-                    borderTop: '1px solid var(--gw-gray-1)',
-                    paddingTop: 18,
-                    display: 'flex',
-                    flexDirection: 'column',
-                    gap: 10,
-                  }}
-                >
-                  <Kicker>&gt; GUIDES</Kicker>
-                  <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
-                    {product.guides.map((guide) => (
-                      <BracketLink key={guide.href} href={guide.href}>
-                        {guide.label}
-                      </BracketLink>
-                    ))}
-                  </div>
-                </div>
-
-                <div
-                  style={{
                     display: 'flex',
                     alignItems: 'center',
                     gap: 16,
@@ -438,7 +419,6 @@ export function Competitor({ config, counter }: { config: ClientConfig; counter:
               or endorsements.
             </p>
             <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap' }}>
-              <BracketLink href={alt.href}>full comparison</BracketLink>
               <BracketLink href="#contact">{config.ctaLabel}</BracketLink>
             </div>
           </div>

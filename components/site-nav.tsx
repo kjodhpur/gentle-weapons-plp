@@ -32,11 +32,9 @@ export function SiteNav({ config }: { config: ClientConfig }) {
         style={{ maxWidth: 1280, margin: '0 auto' }}
       >
         <div style={{ display: 'flex', alignItems: 'center', gap: 18, minWidth: 0 }}>
-          <a
-            href="https://gentleweapons.com/"
-            aria-label="Gentle Weapons — home"
-            style={{ display: 'inline-flex', alignItems: 'center', flexShrink: 0 }}
-          >
+          {/* Deliberately not a link. These pages are self-contained: every
+              action funnels to #contact rather than out to the main site. */}
+          <span style={{ display: 'inline-flex', alignItems: 'center', flexShrink: 0 }}>
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src="/assets/logo.png"
@@ -45,7 +43,7 @@ export function SiteNav({ config }: { config: ClientConfig }) {
               height={40}
               style={{ display: 'block', width: 'auto', height: 40 }}
             />
-          </a>
+          </span>
 
           {/* Co-brand divider + prospect name */}
           <span style={{ color: 'var(--gw-gray-1)', flexShrink: 0 }}>×</span>
